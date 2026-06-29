@@ -1,0 +1,1 @@
+enum SWChatMessageType { chatMessage, cowalkMessage }
