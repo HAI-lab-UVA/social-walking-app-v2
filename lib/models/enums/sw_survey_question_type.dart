@@ -1,0 +1,1 @@
+enum SWSurveyQuestionType { text, radio }
