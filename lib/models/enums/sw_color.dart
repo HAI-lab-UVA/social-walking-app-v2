@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
 
-enum SWColor { orange, pink, purple, green, black, white }
+enum SWColor { orange, lightblue, blue, green, black, white, lightgray, gray }
 
 extension SWColorExtension on SWColor {
   Color get color {
     switch (this) {
       case SWColor.orange:
-        return Color(0xfffb8b24); //ARGB format
-      case SWColor.pink:
-        return Color(0xffd90386);
-      case SWColor.purple:
-        return Color(0xff820263);
+        return Color(0xffff833d); //ARGB format
+      case SWColor.lightblue:
+        return Color(0xff00acff);
+      case SWColor.blue:
+        return Color(0xff473bf0);
       case SWColor.green:
-        return Color(0xff04a277);
+        return Color(0xff16c221);
       case SWColor.black:
-        return Color(0xff291720);
+        return Color(0xff011627);
       case SWColor.white:
-        return Color(0xfff5f5f5);
+        return Color(0xfffdfffc);
+      case SWColor.lightgray:
+        return Color(0xffd1e4f4);
+      case SWColor.gray:
+        return Color(0xff284760);
     }
   }
 }
