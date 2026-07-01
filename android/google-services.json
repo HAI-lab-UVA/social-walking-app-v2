@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "722161471924",
+    "project_id": "hai-social-walking",
+    "storage_bucket": "hai-social-walking.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:722161471924:android:c4ea357c38ffd1722e22e1",
+        "android_client_info": {
+          "package_name": "com.afsanehDoryab.socialWalkingApp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "722161471924-o9oclsdca1oehpspdh7nhkpvm2og5t8f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.afsanehDoryab.socialWalkingApp",
+            "certificate_hash": "c29e50c59088a42302e7746ad6769f564d63950f"
+          }
+        },
+        {
+          "client_id": "722161471924-k0s5vno304cne3mqoc6o1im05dlqbab9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBE8QsptGMWXwSQd1srS3tk5uXXIebuW-c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "722161471924-k0s5vno304cne3mqoc6o1im05dlqbab9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "722161471924-igmn9v215dk16q6lvphul1pijv47fdaf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.afsanehDoryab.socialWalking"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:722161471924:android:2c30940d5d94c6fd2e22e1",
+        "android_client_info": {
+          "package_name": "com.uva_hai.social_walking_v2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "722161471924-k0s5vno304cne3mqoc6o1im05dlqbab9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBE8QsptGMWXwSQd1srS3tk5uXXIebuW-c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "722161471924-k0s5vno304cne3mqoc6o1im05dlqbab9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "722161471924-igmn9v215dk16q6lvphul1pijv47fdaf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.afsanehDoryab.socialWalking"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
