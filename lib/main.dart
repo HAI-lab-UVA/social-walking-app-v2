@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:social_walking_2/models/enums/sw_color.dart';
+import 'package:social_walking_2/ui/sw_color.dart';
 import 'package:social_walking_2/router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
             textStyle: TextStyle(fontSize: 24.0),
           ),
           titleMedium: GoogleFonts.alexandria(
-            textStyle: TextStyle(fontSize: 20.0),
+            textStyle: TextStyle(fontSize: 18.0),
           ),
           bodyMedium: GoogleFonts.alexandria(
             textStyle: TextStyle(fontSize: 16.0),
