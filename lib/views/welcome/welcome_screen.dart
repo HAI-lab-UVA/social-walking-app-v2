@@ -14,9 +14,11 @@ class WelcomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             spacing: 8.0,
-
             children: [
-              Image(image: AssetImage("images/welcome.png")),
+              Flexible(
+                flex: 6,
+                child: Image(image: AssetImage("images/welcome.png")),
+              ),
               Text(
                 "Welcome to Social Walking",
                 style: Theme.of(context).textTheme.titleLarge,
@@ -39,6 +41,7 @@ class WelcomeScreen extends StatelessWidget {
                 colors: [null, SWColor.blue.color],
                 style: Theme.of(context).textTheme.bodySmall,
               ),
+              SizedBox(height: 10.0),
             ],
           ),
         ),
