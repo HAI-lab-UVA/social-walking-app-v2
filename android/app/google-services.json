@@ -39,10 +39,10 @@
               "client_type": 3
             },
             {
-              "client_id": "722161471924-igmn9v215dk16q6lvphul1pijv47fdaf.apps.googleusercontent.com",
+              "client_id": "722161471924-ia44gtcsqdqfn4459dhakvgapqf4cp4g.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.afsanehDoryab.socialWalking"
+                "bundle_id": "com.example.socialWalking2"
               }
             }
           ]
@@ -75,10 +75,10 @@
               "client_type": 3
             },
             {
-              "client_id": "722161471924-igmn9v215dk16q6lvphul1pijv47fdaf.apps.googleusercontent.com",
+              "client_id": "722161471924-ia44gtcsqdqfn4459dhakvgapqf4cp4g.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.afsanehDoryab.socialWalking"
+                "bundle_id": "com.example.socialWalking2"
               }
             }
           ]

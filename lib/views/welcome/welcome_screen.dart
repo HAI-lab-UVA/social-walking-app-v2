@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:social_walking_2/ui/simple_ui.dart';
 import 'package:social_walking_2/ui/sw_color.dart';
 
@@ -36,11 +37,15 @@ class WelcomeScreen extends StatelessWidget {
               ),
               Spacer(),
               indigoButton(text: "GET STARTED TODAY", onPressed: () {}),
-              multicolorSentence(
-                text: ["ALREADY HAVE AN ACCOUNT? ", "LOG IN"],
-                colors: [null, SWColor.blue.color],
-                style: Theme.of(context).textTheme.bodySmall,
+              GestureDetector(
+                onTap: () => context.go("/login"),
+                child: multicolorSentence(
+                  text: ["ALREADY HAVE AN ACCOUNT? ", "LOG IN"],
+                  colors: [null, SWColor.blue.color],
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
               ),
+
               SizedBox(height: 10.0),
             ],
           ),
