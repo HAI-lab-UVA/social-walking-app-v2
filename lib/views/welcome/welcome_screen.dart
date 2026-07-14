@@ -17,7 +17,7 @@ class WelcomeScreen extends StatelessWidget {
             spacing: 8.0,
             children: [
               Flexible(
-                flex: 6,
+                flex: 5,
                 child: Image(image: AssetImage("images/welcome.png")),
               ),
               Text(
@@ -41,7 +41,7 @@ class WelcomeScreen extends StatelessWidget {
                 ),
               ),
 
-              SizedBox(height: 10.0),
+              SizedBox(height: 30.0),
             ],
           ),
         ),
