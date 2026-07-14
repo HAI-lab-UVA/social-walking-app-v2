@@ -93,7 +93,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 textAlign: TextAlign.center,
               ),
               Spacer(),
-              indigoButton(
+              googleButton(
                 text: "LOG IN WITH GOOGLE",
                 onPressed: handleSignInWithGoogle,
               ),

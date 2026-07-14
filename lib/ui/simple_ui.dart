@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:social_walking_2/ui/sw_color.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 Widget multiColorSentence({
   required List<String> text,
@@ -30,6 +31,20 @@ Widget indigoButton({required String text, required Function() onPressed}) {
     ),
     onPressed: onPressed,
     child: Text(text),
+  );
+}
+
+Widget googleButton({required String text, required Function() onPressed}) {
+  return TextButton.icon(
+    style: TextButton.styleFrom(
+      foregroundColor: SWColor.black,
+      backgroundColor: SWColor.white,
+      side: BorderSide(color: SWColor.black, width: 2.0),
+      padding: EdgeInsets.only(top: 14.0, bottom: 14.0),
+    ),
+    onPressed: onPressed,
+    label: Text(text),
+    icon: SvgPicture.asset("images/google.svg", height: 28.0),
   );
 }
 
