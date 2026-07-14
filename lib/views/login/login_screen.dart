@@ -4,11 +4,80 @@ import 'package:social_walking_2/ui/simple_ui.dart';
 import 'package:social_walking_2/ui/sw_color.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class LoginScreen extends ConsumerWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends ConsumerState<LoginScreen> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+  String? emailErrorText = "";
+  String? googleErrorText = "";
+  bool isProcessingLogin = false;
+
+  void handleSignInWithEmail() async {
+    if (!isProcessingLogin) {
+      setState(() {
+        emailErrorText = "";
+        isProcessingLogin = true;
+      });
+      if (formKey.currentState!.validate()) {
+        final email = emailController.text;
+        final password = passwordController.text;
+        final status = await ref
+            .read(authRepositoryProvider)
+            .signInWithEmailAndPassword(email: email, password: password);
+
+        if (status.success) {
+          setState(() {
+            emailErrorText = "logged in";
+            isProcessingLogin = false;
+          });
+        } else {
+          setState(() {
+            emailErrorText = status.content;
+            isProcessingLogin = false;
+          });
+        }
+      }
+    }
+  }
+
+  void handleSignInWithGoogle() async {
+    if (!isProcessingLogin) {
+      setState(() {
+        googleErrorText = "";
+        isProcessingLogin = true;
+      });
+      final status = await ref.read(authRepositoryProvider).signInWithGoogle();
+
+      if (status.success) {
+        setState(() {
+          googleErrorText = "logged in";
+          isProcessingLogin = false;
+        });
+      } else {
+        setState(() {
+          googleErrorText = status.content;
+          isProcessingLogin = false;
+        });
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -23,37 +92,85 @@ class LoginScreen extends ConsumerWidget {
                 style: Theme.of(context).textTheme.titleLarge,
                 textAlign: TextAlign.center,
               ),
-
               Spacer(),
               indigoButton(
                 text: "LOG IN WITH GOOGLE",
-                onPressed: () {
-                  ref.read(authRepositoryProvider).signInWithGoogle();
-                },
-              ), //TODO
+                onPressed: handleSignInWithGoogle,
+              ),
+              if (googleErrorText != null && googleErrorText != "")
+                Text(
+                  googleErrorText!,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall!.copyWith(color: SWColor.red),
+                  textAlign: TextAlign.center,
+                ),
               Spacer(),
-              indigoButton(
-                text: "LOG IN",
-                onPressed: () {
-                  ref
-                      .read(authRepositoryProvider)
-                      .signInWithEmailAndPassword(
-                        email: "jt@email.com",
-                        password: "12345678",
-                      );
-                },
-              ), //TODO
-              multicolorSentence(
-                text: ["FORGOT PASSWORD?"],
-                colors: [SWColor.blue.color],
+
+              Text(
+                "OR LOG IN WITH EMAIL",
                 style: Theme.of(context).textTheme.bodySmall,
+                textAlign: TextAlign.center,
               ),
-              multicolorSentence(
+              Form(
+                key: formKey,
+                child: Column(
+                  spacing: 8.0,
+                  children: [
+                    textInputField(
+                      hintText: "EMAIL",
+                      controller: emailController,
+                      context: context,
+                      validator: (value) {
+                        final emailRegex = RegExp(
+                          r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                        );
+
+                        if (value == null || value == "") {
+                          return "Email cannot be empty.";
+                        } else if (!emailRegex.hasMatch(value)) {
+                          return "Please enter a valid email.";
+                        }
+                        return null;
+                      },
+                    ),
+                    textInputField(
+                      hintText: "PASSWORD",
+                      controller: passwordController,
+                      context: context,
+                      validator: (value) {
+                        if (value == null || value == "") {
+                          return "Password cannot be empty.";
+                        }
+                        return null;
+                      },
+                    ),
+
+                    if (emailErrorText != null && emailErrorText != "")
+                      Text(
+                        emailErrorText!,
+                        style: Theme.of(
+                          context,
+                        ).textTheme.bodySmall!.copyWith(color: SWColor.red),
+                        textAlign: TextAlign.center,
+                      ),
+                  ],
+                ),
+              ),
+              indigoButton(text: "LOG IN", onPressed: handleSignInWithEmail),
+              Text(
+                "FORGOT PASSWORD?",
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall!.copyWith(color: SWColor.blueLight),
+                textAlign: TextAlign.center,
+              ),
+              multiColorSentence(
                 text: ["DON'T HAVE AN ACCOUNT? ", "SIGN UP"],
-                colors: [null, SWColor.blue.color],
+                colors: [null, SWColor.blueLight],
                 style: Theme.of(context).textTheme.bodySmall,
               ),
-              SizedBox(height: 10.0),
+              Spacer(),
             ],
           ),
         ),

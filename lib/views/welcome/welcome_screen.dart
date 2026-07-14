@@ -25,23 +25,18 @@ class WelcomeScreen extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleLarge,
                 textAlign: TextAlign.center,
               ),
-              multicolorSentence(
+              multiColorSentence(
                 text: ["Meet ", "new people ", "and your ", "fitness goals"],
-                colors: [
-                  null,
-                  SWColor.lightblue.color,
-                  null,
-                  SWColor.green.color,
-                ],
+                colors: [null, SWColor.blueLight, null, SWColor.green],
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               Spacer(),
               indigoButton(text: "GET STARTED TODAY", onPressed: () {}),
               GestureDetector(
                 onTap: () => context.go("/login"),
-                child: multicolorSentence(
+                child: multiColorSentence(
                   text: ["ALREADY HAVE AN ACCOUNT? ", "LOG IN"],
-                  colors: [null, SWColor.blue.color],
+                  colors: [null, SWColor.blueLight],
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),

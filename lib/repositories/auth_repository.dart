@@ -4,7 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthStatus {
   final bool success;
-  final String? content;
+  final dynamic content;
   AuthStatus({required this.success, required this.content});
 }
 
@@ -73,7 +73,7 @@ class AuthRepository {
     return GoogleSignIn.instance.initialize();
   }
 
-  Future<User?> signInWithGoogle() async {
+  Future<AuthStatus> signInWithGoogle() async {
     await _initializeGoogleSignIn();
     final account = await GoogleSignIn.instance.authenticate(
       scopeHint: ["email", "profile"],
@@ -85,11 +85,17 @@ class AuthRepository {
       final UserCredential userCred = await firebaseAuth.signInWithCredential(
         credential,
       );
-      return userCred.user;
-    } on FirebaseAuthException catch (_) {
-      return null;
-    } catch (e) {
-      return null;
+      return AuthStatus(
+        success: true,
+        content: userCred.user,
+      ); //userCred.user is null for new account
+    } on FirebaseAuthException catch (e) {
+      final String message;
+      switch (e.code) {
+        default:
+          message = "There was an error logging in. Please try again later.";
+      }
+      return AuthStatus(success: false, content: message);
     }
   }
 }

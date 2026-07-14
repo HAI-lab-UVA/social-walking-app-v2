@@ -19,9 +19,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Flutter Demo',
+      title: 'Social Walking',
       theme: ThemeData(
-        scaffoldBackgroundColor: SWColor.white.color,
+        scaffoldBackgroundColor: SWColor.white,
         textTheme: TextTheme(
           titleLarge: GoogleFonts.alexandria(
             textStyle: TextStyle(fontSize: 24.0),
