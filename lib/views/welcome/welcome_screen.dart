@@ -31,7 +31,7 @@ class WelcomeScreen extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               Spacer(),
-              indigoButton(text: "GET STARTED TODAY", onPressed: () {}),
+              customButton(text: "GET STARTED TODAY", onPressed: () {}),
               GestureDetector(
                 onTap: () => context.go("/login"),
                 child: multiColorSentence(
@@ -40,8 +40,8 @@ class WelcomeScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),
-
-              SizedBox(height: 30.0),
+              Spacer(),
+              SizedBox(height: 10.0),
             ],
           ),
         ),

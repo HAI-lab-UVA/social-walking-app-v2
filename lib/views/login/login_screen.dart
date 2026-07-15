@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:social_walking_2/repositories/auth_repository.dart';
+import 'package:social_walking_2/repositories/user_repository.dart';
 import 'package:social_walking_2/ui/simple_ui.dart';
 import 'package:social_walking_2/ui/sw_color.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,10 +35,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             .signInWithEmailAndPassword(email: email, password: password);
 
         if (status.success) {
-          setState(() {
-            emailErrorText = "logged in";
-            isProcessingLogin = false;
-          });
+          final String uid = status.content;
+          final userExists = await ref
+              .read(userRepositoryProvider)
+              .userExists(uid);
+          if (userExists) {
+            setState(() {
+              emailErrorText = "user exists";
+              isProcessingLogin = false;
+            });
+          } else {
+            if (mounted) {
+              context.go("/onboarding");
+            }
+          }
         } else {
           setState(() {
             emailErrorText = status.content;
@@ -58,6 +70,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       if (status.success) {
         setState(() {
           googleErrorText = "logged in";
+
           isProcessingLogin = false;
         });
       } else {
@@ -144,6 +157,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         }
                         return null;
                       },
+                      isObscured: true,
                     ),
 
                     if (emailErrorText != null && emailErrorText != "")
@@ -157,7 +171,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ],
                 ),
               ),
-              indigoButton(text: "LOG IN", onPressed: handleSignInWithEmail),
+              customButton(text: "LOG IN", onPressed: handleSignInWithEmail),
               Text(
                 "FORGOT PASSWORD?",
                 style: Theme.of(

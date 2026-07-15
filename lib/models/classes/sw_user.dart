@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:social_walking_2/models/classes/sw_fitness_goal.dart';
 import 'package:social_walking_2/models/classes/sw_location.dart';
 import 'package:social_walking_2/models/classes/sw_time_range.dart';
@@ -100,7 +102,39 @@ class SWUser {
           (json["weeklySocialStepGoals"] as Map<int, dynamic>).map(
             (k, v) => MapEntry(k, SWFitnessGoal.fromString(v as String)),
           ),
+      weeklyMeetPeopleGoal: SWFitnessGoal.fromString(
+        json["weeklyMeetPeopleGoal"],
+      ),
       finishedSetup: json["finishedSetup"] as bool,
+      location: SWLocation.fromJson(json["location"]),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "created": created,
+      "id": id,
+      "fcmToken": fcmToken,
+      "firstName": firstName,
+      "lastName": lastName,
+      "pronouns": pronouns,
+      "dateOfBirth": dateOfBirth.toString(),
+      "gender": gender.toString(),
+      "biography": biography,
+      "profileImageURL": profileImageURL,
+      "walkPreferences": jsonEncode(walkPreferences.map((e) => e.toString())),
+      "walkedWith": jsonEncode(walkedWith),
+      "chattedWith": jsonEncode(chattedWith),
+      "availability": jsonEncode(
+        availability.map((k, v) => MapEntry(k, v.toString())),
+      ),
+      "isSharingProximity": isSharingProximity.toString(),
+      "weeklySocialStepGoals": jsonEncode(
+        weeklySocialStepGoals.map((k, v) => MapEntry(k, v.toString())),
+      ),
+      "weeklyMeetPeopleGoal": weeklyMeetPeopleGoal.toString(),
+      "finishedSetup": finishedSetup.toString(),
+      "location": location?.toJson(),
+    };
   }
 }

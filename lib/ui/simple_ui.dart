@@ -22,11 +22,16 @@ Widget multiColorSentence({
   );
 }
 
-Widget indigoButton({required String text, required Function() onPressed}) {
+Widget customButton({
+  required String text,
+  required Function() onPressed,
+  Color? foregroundColor,
+  Color? backgroundColor,
+}) {
   return TextButton(
     style: TextButton.styleFrom(
-      foregroundColor: SWColor.white,
-      backgroundColor: SWColor.blue,
+      foregroundColor: foregroundColor ?? SWColor.white,
+      backgroundColor: backgroundColor ?? SWColor.blue,
       padding: EdgeInsets.only(top: 14.0, bottom: 14.0),
     ),
     onPressed: onPressed,
@@ -53,6 +58,7 @@ Widget textInputField({
   required TextEditingController controller,
   required BuildContext context,
   required String? Function(String?)? validator,
+  bool? isObscured,
 }) {
   final grayTextStyle = Theme.of(
     context,
@@ -74,5 +80,6 @@ Widget textInputField({
       ).textTheme.bodySmall!.copyWith(color: SWColor.red),
     ),
     validator: validator,
+    obscureText: isObscured ?? false,
   );
 }
