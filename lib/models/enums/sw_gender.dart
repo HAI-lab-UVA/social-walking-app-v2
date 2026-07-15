@@ -5,12 +5,12 @@ enum SWGender {
   other("Other"),
   preferNotToSay("Prefer Not To Say");
 
-  final String name;
-  const SWGender(this.name);
+  final String formattedName;
+  const SWGender(this.formattedName);
 }
 
 extension SWGenderExtension on SWGender {
-  String get name {
+  String get formattedName {
     switch (this) {
       case SWGender.male:
         return "Male";

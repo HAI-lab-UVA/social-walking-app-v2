@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:social_walking_2/models/classes/sw_fitness_goal.dart';
 import 'package:social_walking_2/models/classes/sw_location.dart';
 import 'package:social_walking_2/models/classes/sw_time_range.dart';
@@ -85,13 +83,15 @@ class SWUser {
       walkPreferences: (json["walkPreferences"] as List<dynamic>)
           .map((e) => SWWalkPreference.values.byName(e))
           .toList(),
-      walkedWith: json["walkedwith"] as Map<String, int>?,
-      chattedWith: (json["walkPreferences"] as List<dynamic>)
+      walkedWith: (json["walkedWith"] as Map<String, dynamic>).map(
+        (k, v) => MapEntry(k, v as int),
+      ),
+      chattedWith: (json["chattedWith"] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
-      availability: (json["availability"] as Map<int, dynamic>).map(
+      availability: (json["availability"] as Map<String, dynamic>).map(
         (k, v) => MapEntry(
-          k,
+          int.parse(k),
           (v as List<dynamic>)
               .map((e) => SWTimeRange.fromString(e as String))
               .toList(),
@@ -99,41 +99,46 @@ class SWUser {
       ),
       isSharingProximity: json["isSharingProximity"] as bool,
       weeklySocialStepGoals:
-          (json["weeklySocialStepGoals"] as Map<int, dynamic>).map(
-            (k, v) => MapEntry(k, SWFitnessGoal.fromString(v as String)),
+          (json["weeklySocialStepGoals"] as Map<String, dynamic>).map(
+            (k, v) => MapEntry(
+              int.parse(k),
+              v != null ? SWFitnessGoal.fromString(v as String) : null,
+            ),
           ),
-      weeklyMeetPeopleGoal: SWFitnessGoal.fromString(
-        json["weeklyMeetPeopleGoal"],
-      ),
+      weeklyMeetPeopleGoal: json["weeklyMeetPeopleGoal"] != null
+          ? SWFitnessGoal.fromString(json["weeklyMeetPeopleGoal"])
+          : null,
       finishedSetup: json["finishedSetup"] as bool,
-      location: SWLocation.fromJson(json["location"]),
+      location: json["location"] != null
+          ? SWLocation.fromJson(json["location"])
+          : null,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "created": created,
+      "created": created.toIso8601String(),
       "id": id,
       "fcmToken": fcmToken,
       "firstName": firstName,
       "lastName": lastName,
       "pronouns": pronouns,
-      "dateOfBirth": dateOfBirth.toString(),
-      "gender": gender.toString(),
+      "dateOfBirth": dateOfBirth.toIso8601String(),
+      "gender": gender.name,
       "biography": biography,
       "profileImageURL": profileImageURL,
-      "walkPreferences": jsonEncode(walkPreferences.map((e) => e.toString())),
-      "walkedWith": jsonEncode(walkedWith),
-      "chattedWith": jsonEncode(chattedWith),
-      "availability": jsonEncode(
-        availability.map((k, v) => MapEntry(k, v.toString())),
+      "walkPreferences": walkPreferences.map((e) => e.name).toList(),
+      "walkedWith": walkedWith,
+      "chattedWith": chattedWith,
+      "availability": availability.map(
+        (k, v) => MapEntry(k.toString(), v.map((e) => e.toString()).toList()),
       ),
-      "isSharingProximity": isSharingProximity.toString(),
-      "weeklySocialStepGoals": jsonEncode(
-        weeklySocialStepGoals.map((k, v) => MapEntry(k, v.toString())),
+      "isSharingProximity": isSharingProximity,
+      "weeklySocialStepGoals": weeklySocialStepGoals.map(
+        (k, v) => MapEntry(k.toString(), v?.toString()),
       ),
-      "weeklyMeetPeopleGoal": weeklyMeetPeopleGoal.toString(),
-      "finishedSetup": finishedSetup.toString(),
+      "weeklyMeetPeopleGoal": weeklyMeetPeopleGoal?.toString(),
+      "finishedSetup": finishedSetup,
       "location": location?.toJson(),
     };
   }

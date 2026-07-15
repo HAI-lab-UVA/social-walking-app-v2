@@ -40,10 +40,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               .read(userRepositoryProvider)
               .userExists(uid);
           if (userExists) {
-            setState(() {
-              emailErrorText = "user exists";
-              isProcessingLogin = false;
-            });
+            if (mounted) {
+              context.go("/home");
+            }
           } else {
             if (mounted) {
               context.go("/onboarding");
@@ -55,6 +54,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             isProcessingLogin = false;
           });
         }
+      } else {
+        setState(() {
+          isProcessingLogin = false;
+        });
       }
     }
   }

@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:social_walking_2/models/classes/sw_user.dart';
+import 'package:social_walking_2/models/enums/sw_gender.dart';
+import 'package:social_walking_2/repositories/auth_repository.dart';
+import 'package:social_walking_2/repositories/user_repository.dart';
 import 'package:social_walking_2/ui/simple_ui.dart';
 import 'package:social_walking_2/ui/sw_color.dart';
 
@@ -13,20 +18,53 @@ class OnboadingScreen extends ConsumerStatefulWidget {
 class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
-
   final formKey = GlobalKey<FormState>();
+  bool isProcessingLogin = false;
 
-  // @override
-  // void dispose() {
-  //   emailController.dispose();
-  //   passwordController.dispose();
-  //   super.dispose();
-  // }
+  void createAccount() async {
+    if (!isProcessingLogin) {
+      setState(() {
+        isProcessingLogin = true;
+      });
+      if (formKey.currentState!.validate()) {
+        final newUser = SWUser(
+          created: DateTime.now(),
+          id: ref.read(authRepositoryProvider).getCurrentUserId(),
+          fcmToken: "placeholder",
+          firstName: firstNameController.text,
+          lastName: lastNameController.text,
+          pronouns: "placeholder",
+          dateOfBirth: DateTime.now(),
+          gender: SWGender.female,
+          biography: "placeholder",
+          profileImageURL: null,
+        );
+        ref.read(userRepositoryProvider).createUser(newUser.id, newUser).then((
+          _,
+        ) {
+          if (mounted) {
+            context.go("/home");
+          }
+        });
+      } else {
+        setState(() {
+          isProcessingLogin = false;
+        });
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    firstNameController.dispose();
+    lastNameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final listViewItems = [
-      Spacer(),
+      SizedBox(height: 30),
       Text(
         "Hello! Welcome to the Social Walking Community",
         style: Theme.of(
@@ -41,7 +79,14 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
         ).textTheme.titleMedium!.copyWith(color: SWColor.white),
         textAlign: TextAlign.center,
       ),
-      Spacer(),
+      Text(
+        "(You can change this information later)",
+        style: Theme.of(
+          context,
+        ).textTheme.bodySmall!.copyWith(color: SWColor.white),
+        textAlign: TextAlign.center,
+      ),
+      SizedBox(height: 30),
       Form(
         key: formKey,
         child: Column(
@@ -74,11 +119,11 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
       ),
       customButton(
         text: "LET'S GO!",
-        onPressed: () {},
+        onPressed: createAccount,
         backgroundColor: SWColor.blue,
       ),
 
-      Spacer(),
+      SizedBox(height: 30),
     ];
     return Scaffold(
       backgroundColor: SWColor.blueLight,
