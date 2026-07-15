@@ -62,7 +62,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
   }
 
-  // TODO: HANDLE LOGIN WITH GOOGLE
   void handleSignInWithGoogle() async {
     if (!isProcessingLogin) {
       setState(() {
@@ -72,11 +71,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       final status = await ref.read(authRepositoryProvider).signInWithGoogle();
 
       if (status.success) {
-        setState(() {
-          googleErrorText = "logged in";
-
-          isProcessingLogin = false;
-        });
+        final String uid = status.content.uid;
+        final userExists = await ref
+            .read(userRepositoryProvider)
+            .userExists(uid);
+        if (userExists) {
+          if (mounted) {
+            context.go("/home/$uid");
+          }
+        } else {
+          if (mounted) {
+            context.go("/onboarding");
+          }
+        }
       } else {
         setState(() {
           googleErrorText = status.content;

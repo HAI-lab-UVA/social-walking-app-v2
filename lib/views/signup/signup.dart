@@ -24,67 +24,65 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   bool isProcessingSignup = false;
 
   void handleSignUpWithEmail() async {
-    // if (!isProcessingSignup) {
-    //   setState(() {
-    //     emailErrorText = "";
-    //     isProcessingSignup = true;
-    //   });
-    //   if (formKey.currentState!.validate()) {
-    //     final email = emailController.text;
-    //     final password = passwordController.text;
-    //     final status = await ref
-    //         .read(authRepositoryProvider)
-    //         .signInWithEmailAndPassword(email: email, password: password);
+    if (!isProcessingSignup) {
+      setState(() {
+        emailErrorText = "";
+        isProcessingSignup = true;
+      });
+      if (formKey.currentState!.validate()) {
+        final email = emailController.text;
+        final password = passwordController.text;
+        final status = await ref
+            .read(authRepositoryProvider)
+            .signUpWithEmailAndPassword(email: email, password: password);
 
-    //     if (status.success) {
-    //       final String uid = status.content;
-    //       final userExists = await ref
-    //           .read(userRepositoryProvider)
-    //           .userExists(uid);
-    //       if (userExists) {
-    //         if (mounted) {
-    //           context.go("/home/$uid");
-    //         }
-    //       } else {
-    //         if (mounted) {
-    //           context.go("/onboarding");
-    //         }
-    //       }
-    //     } else {
-    //       setState(() {
-    //         emailErrorText = status.content;
-    //         isProcessingSignup = false;
-    //       });
-    //     }
-    //   } else {
-    //     setState(() {
-    //       isProcessingSignup = false;
-    //     });
-    //   }
-    // }
+        if (status.success) {
+          if (mounted) {
+            context.go("/onboarding");
+          }
+        } else {
+          setState(() {
+            emailErrorText = status.content;
+            isProcessingSignup = false;
+          });
+        }
+      } else {
+        setState(() {
+          isProcessingSignup = false;
+        });
+      }
+    }
   }
 
   void handleSignUpWithGoogle() async {
-    // if (!isProcessingSignup) {
-    //   setState(() {
-    //     googleErrorText = "";
-    //     isProcessingSignup = true;
-    //   });
-    //   final status = await ref.read(authRepositoryProvider).signInWithGoogle();
+    if (!isProcessingSignup) {
+      setState(() {
+        googleErrorText = "";
+        isProcessingSignup = true;
+      });
+      final status = await ref.read(authRepositoryProvider).signInWithGoogle();
 
-    //   if (status.success) {
-    //     setState(() {
-    //       googleErrorText = "logged in";
-
-    //       isProcessingSignup = false;
-    //     });
-    //   } else {
-    //     setState(() {
-    //       googleErrorText = status.content;
-    //       isProcessingSignup = false;
-    //     });
-    //   }
-    // }
+      if (status.success) {
+        final String uid = status.content.uid;
+        final userExists = await ref
+            .read(userRepositoryProvider)
+            .userExists(uid);
+        if (userExists) {
+          if (mounted) {
+            context.go("/home/$uid");
+          }
+        } else {
+          if (mounted) {
+            context.go("/onboarding");
+          }
+        }
+      } else {
+        setState(() {
+          googleErrorText = status.content;
+          isProcessingSignup = false;
+        });
+      }
+    }
   }
 
   @override

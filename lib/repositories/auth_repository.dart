@@ -45,8 +45,14 @@ class AuthRepository {
         password: password,
       );
       return AuthStatus(success: true, content: userCredential.user!.uid);
-    } on FirebaseAuthException {
-      final message = "Failed to sign up. Please try again later.";
+    } on FirebaseAuthException catch (e) {
+      final String message;
+      switch (e.code) {
+        case "email-already-in-use":
+          message = "This email is unavailable.";
+        default:
+          message = "There was an error singing up. Please try again later.";
+      }
       return AuthStatus(success: false, content: message);
     }
   }
@@ -85,10 +91,7 @@ class AuthRepository {
       final UserCredential userCred = await firebaseAuth.signInWithCredential(
         credential,
       );
-      return AuthStatus(
-        success: true,
-        content: userCred.user,
-      ); //userCred.user is null for new account
+      return AuthStatus(success: true, content: userCred.user);
     } on FirebaseAuthException catch (e) {
       final String message;
       switch (e.code) {
