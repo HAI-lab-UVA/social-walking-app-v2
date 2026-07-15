@@ -69,7 +69,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             .userExists(uid);
         if (userExists) {
           if (mounted) {
-            context.go("/home/$uid");
+            context.go("/home");
           }
         } else {
           if (mounted) {

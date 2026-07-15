@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:social_walking_2/repositories/auth_repository.dart';
 import 'package:social_walking_2/ui/simple_ui.dart';
 import 'package:social_walking_2/utils/ble_broadcaster.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
-  final String uid;
-  const HomeScreen({required this.uid, super.key});
+  const HomeScreen({super.key});
 
   @override
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
@@ -43,7 +43,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   void startBLEBroadcasting() {
-    broadcaster.startBroadcasting(widget.uid);
+    broadcaster.startBroadcasting(
+      ref.read(authRepositoryProvider).getCurrentUserId(),
+    );
   }
 
   void stopBLEBroadcasting() {
@@ -52,27 +54,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            spacing: 8.0,
-            children: [
-              customButton(text: "Start Scan", onPressed: startBLEScanning),
-              customButton(
-                text: "Start Broadcast",
-                onPressed: startBLEBroadcasting,
-              ),
-              customButton(
-                text: "Stop Broadcast",
-                onPressed: stopBLEBroadcasting,
-              ),
-            ],
-          ),
-        ),
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      spacing: 8.0,
+      children: [
+        customButton(text: "Start Scan", onPressed: startBLEScanning),
+        customButton(text: "Start Broadcast", onPressed: startBLEBroadcasting),
+        customButton(text: "Stop Broadcast", onPressed: stopBLEBroadcasting),
+      ],
     );
   }
 }

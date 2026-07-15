@@ -41,7 +41,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               .userExists(uid);
           if (userExists) {
             if (mounted) {
-              context.go("/home/$uid");
+              context.go("/home");
             }
           } else {
             if (mounted) {
@@ -77,7 +77,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             .userExists(uid);
         if (userExists) {
           if (mounted) {
-            context.go("/home/$uid");
+            context.go("/home");
           }
         } else {
           if (mounted) {
