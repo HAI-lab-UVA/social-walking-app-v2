@@ -1,7 +1,5 @@
-import 'package:social_walking_2/models/classes/sw_date_time.dart';
-
 class SWChat {
-  final SWDateTime created;
+  final DateTime created;
   final String receiverId;
   final String senderId;
   final int cowalksFinished;

@@ -10,4 +10,16 @@ class SWTimeRange {
     required this.stop,
     required this.interval,
   });
+
+  String toString() {
+    return "$start-$stop-$interval";
+  }
+
+  factory SWTimeRange.fromString(String str) {
+    final split = str.split("-");
+    final start = SWTime.fromUTCString(split[0]);
+    final stop = SWTime.fromUTCString(split[1]);
+    final interval = int.parse(split[2]);
+    return SWTimeRange(start: start, stop: stop, interval: interval);
+  }
 }

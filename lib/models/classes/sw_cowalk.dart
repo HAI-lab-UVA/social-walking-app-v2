@@ -1,21 +1,20 @@
-import 'package:social_walking_2/models/classes/sw_date_time.dart';
 import 'package:social_walking_2/models/classes/sw_location.dart';
 import 'package:social_walking_2/models/classes/sw_survey_question.dart';
 import 'package:social_walking_2/models/enums/sw_cowalk_status.dart';
 
 class SWCowalk {
   final SWCowalkStatus status;
-  final SWDateTime created;
+  final DateTime created;
   final String id;
   final String senderId;
   final String receiverId;
   late SWLocation? scheduledLocation;
-  late SWDateTime scheduledDate;
+  late DateTime scheduledDate;
   late Map<String, Map<SWSurveyQuestion, dynamic>?> feedback;
   late Map<String, SWLocation?> userStartLocations;
   late Map<String, SWLocation?> userEndLocations;
-  late Map<String, SWDateTime?> userStartTimes;
-  late Map<String, SWDateTime?> userEndTimes;
+  late Map<String, DateTime?> userStartTimes;
+  late Map<String, DateTime?> userEndTimes;
 
   SWCowalk({
     required this.status,

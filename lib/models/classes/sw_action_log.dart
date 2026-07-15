@@ -1,9 +1,7 @@
-import 'package:social_walking_2/models/classes/sw_date_time.dart';
-
 class SWActionLog {
   final String action;
   final String screen;
-  final SWDateTime timestamp;
+  final DateTime timestamp;
 
   SWActionLog({
     required this.action,
