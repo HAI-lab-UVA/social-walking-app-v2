@@ -78,8 +78,12 @@ Widget textInputField({
       errorStyle: Theme.of(
         context,
       ).textTheme.bodySmall!.copyWith(color: SWColor.red),
+      errorMaxLines: 2,
     ),
     validator: validator,
     obscureText: isObscured ?? false,
+    onTapOutside: (PointerDownEvent event) {
+      FocusManager.instance.primaryFocus?.unfocus();
+    },
   );
 }
