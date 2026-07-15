@@ -27,9 +27,10 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
         isProcessingLogin = true;
       });
       if (formKey.currentState!.validate()) {
+        final uid = ref.read(authRepositoryProvider).getCurrentUserId();
         final newUser = SWUser(
           created: DateTime.now(),
-          id: ref.read(authRepositoryProvider).getCurrentUserId(),
+          id: uid,
           fcmToken: "placeholder",
           firstName: firstNameController.text,
           lastName: lastNameController.text,
@@ -39,11 +40,9 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
           biography: "placeholder",
           profileImageURL: null,
         );
-        ref.read(userRepositoryProvider).createUser(newUser.id, newUser).then((
-          _,
-        ) {
+        ref.read(userRepositoryProvider).createUser(uid, newUser).then((_) {
           if (mounted) {
-            context.go("/home");
+            context.go("/home/$uid");
           }
         });
       } else {

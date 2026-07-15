@@ -25,7 +25,10 @@ final router = GoRouter(
     GoRoute(
       name: 'home',
       path: '/home',
-      builder: (context, state) => HomeScreen(),
+      builder: (context, state) {
+        final uid = state.pathParameters['uid']!;
+        return HomeScreen(uid: uid);
+      },
     ),
   ],
 );
