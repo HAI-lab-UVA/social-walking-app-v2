@@ -19,12 +19,12 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
   final formKey = GlobalKey<FormState>();
-  bool isProcessingLogin = false;
+  bool isProcessingOnboarding = false;
 
   void createAccount() async {
-    if (!isProcessingLogin) {
+    if (!isProcessingOnboarding) {
       setState(() {
-        isProcessingLogin = true;
+        isProcessingOnboarding = true;
       });
       if (formKey.currentState!.validate()) {
         final uid = ref.read(authRepositoryProvider).getCurrentUserId();
@@ -47,7 +47,7 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
         });
       } else {
         setState(() {
-          isProcessingLogin = false;
+          isProcessingOnboarding = false;
         });
       }
     }

@@ -31,7 +31,10 @@ class WelcomeScreen extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               Spacer(),
-              customButton(text: "GET STARTED TODAY", onPressed: () {}),
+              customButton(
+                text: "GET STARTED TODAY",
+                onPressed: () => context.go("/signup"),
+              ),
               GestureDetector(
                 onTap: () => context.go("/login"),
                 child: multiColorSentence(

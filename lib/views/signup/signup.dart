@@ -6,90 +6,92 @@ import 'package:social_walking_2/ui/simple_ui.dart';
 import 'package:social_walking_2/ui/sw_color.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class LoginScreen extends ConsumerStatefulWidget {
-  const LoginScreen({super.key});
+class SignupScreen extends ConsumerStatefulWidget {
+  const SignupScreen({super.key});
 
   @override
-  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _LoginScreenState extends ConsumerState<LoginScreen> {
+class _SignupScreenState extends ConsumerState<SignupScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController passwordConfirmController =
+      TextEditingController();
   final formKey = GlobalKey<FormState>();
   String? emailErrorText = "";
   String? googleErrorText = "";
-  bool isProcessingLogin = false;
+  bool isProcessingSignup = false;
 
-  void handleSignInWithEmail() async {
-    if (!isProcessingLogin) {
-      setState(() {
-        emailErrorText = "";
-        isProcessingLogin = true;
-      });
-      if (formKey.currentState!.validate()) {
-        final email = emailController.text;
-        final password = passwordController.text;
-        final status = await ref
-            .read(authRepositoryProvider)
-            .signInWithEmailAndPassword(email: email, password: password);
+  void handleSignUpWithEmail() async {
+    // if (!isProcessingSignup) {
+    //   setState(() {
+    //     emailErrorText = "";
+    //     isProcessingSignup = true;
+    //   });
+    //   if (formKey.currentState!.validate()) {
+    //     final email = emailController.text;
+    //     final password = passwordController.text;
+    //     final status = await ref
+    //         .read(authRepositoryProvider)
+    //         .signInWithEmailAndPassword(email: email, password: password);
 
-        if (status.success) {
-          final String uid = status.content;
-          final userExists = await ref
-              .read(userRepositoryProvider)
-              .userExists(uid);
-          if (userExists) {
-            if (mounted) {
-              context.go("/home/$uid");
-            }
-          } else {
-            if (mounted) {
-              context.go("/onboarding");
-            }
-          }
-        } else {
-          setState(() {
-            emailErrorText = status.content;
-            isProcessingLogin = false;
-          });
-        }
-      } else {
-        setState(() {
-          isProcessingLogin = false;
-        });
-      }
-    }
+    //     if (status.success) {
+    //       final String uid = status.content;
+    //       final userExists = await ref
+    //           .read(userRepositoryProvider)
+    //           .userExists(uid);
+    //       if (userExists) {
+    //         if (mounted) {
+    //           context.go("/home/$uid");
+    //         }
+    //       } else {
+    //         if (mounted) {
+    //           context.go("/onboarding");
+    //         }
+    //       }
+    //     } else {
+    //       setState(() {
+    //         emailErrorText = status.content;
+    //         isProcessingSignup = false;
+    //       });
+    //     }
+    //   } else {
+    //     setState(() {
+    //       isProcessingSignup = false;
+    //     });
+    //   }
+    // }
   }
 
-  // TODO: HANDLE LOGIN WITH GOOGLE
-  void handleSignInWithGoogle() async {
-    if (!isProcessingLogin) {
-      setState(() {
-        googleErrorText = "";
-        isProcessingLogin = true;
-      });
-      final status = await ref.read(authRepositoryProvider).signInWithGoogle();
+  void handleSignUpWithGoogle() async {
+    // if (!isProcessingSignup) {
+    //   setState(() {
+    //     googleErrorText = "";
+    //     isProcessingSignup = true;
+    //   });
+    //   final status = await ref.read(authRepositoryProvider).signInWithGoogle();
 
-      if (status.success) {
-        setState(() {
-          googleErrorText = "logged in";
+    //   if (status.success) {
+    //     setState(() {
+    //       googleErrorText = "logged in";
 
-          isProcessingLogin = false;
-        });
-      } else {
-        setState(() {
-          googleErrorText = status.content;
-          isProcessingLogin = false;
-        });
-      }
-    }
+    //       isProcessingSignup = false;
+    //     });
+    //   } else {
+    //     setState(() {
+    //       googleErrorText = status.content;
+    //       isProcessingSignup = false;
+    //     });
+    //   }
+    // }
   }
 
   @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
+    passwordConfirmController.dispose();
     super.dispose();
   }
 
@@ -105,14 +107,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             children: [
               Spacer(),
               Text(
-                "Welcome Back!",
+                "Create Your Account",
                 style: Theme.of(context).textTheme.titleLarge,
                 textAlign: TextAlign.center,
               ),
               Spacer(),
               googleButton(
-                text: "LOG IN WITH GOOGLE",
-                onPressed: handleSignInWithGoogle,
+                text: "SIGN UP WITH GOOGLE",
+                onPressed: handleSignUpWithGoogle,
               ),
               if (googleErrorText != null && googleErrorText != "")
                 Text(
@@ -125,7 +127,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               Spacer(),
 
               Text(
-                "OR LOG IN WITH EMAIL",
+                "OR SIGN UP WITH EMAIL",
                 style: Theme.of(context).textTheme.bodySmall,
                 textAlign: TextAlign.center,
               ),
@@ -158,6 +160,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       validator: (value) {
                         if (value == null || value == "") {
                           return "Password cannot be empty.";
+                        } else if (int.parse(value) < 8) {
+                          return "Password must be at least 8 characters.";
+                        }
+                        return null;
+                      },
+                      isObscured: true,
+                    ),
+
+                    textInputField(
+                      hintText: "CONFIRM PASSWORD",
+                      controller: passwordConfirmController,
+                      context: context,
+                      validator: (value) {
+                        if (value != passwordController.text) {
+                          return "Passwords do not match.";
                         }
                         return null;
                       },
@@ -175,18 +192,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ],
                 ),
               ),
-              customButton(text: "LOG IN", onPressed: handleSignInWithEmail),
-              Text(
-                "FORGOT PASSWORD?",
-                style: Theme.of(
-                  context,
-                ).textTheme.bodySmall!.copyWith(color: SWColor.blueLight),
-                textAlign: TextAlign.center,
-              ),
+              customButton(text: "SIGN UP", onPressed: handleSignUpWithEmail),
+
               GestureDetector(
-                onTap: () => context.go("/signup"),
+                onTap: () => context.go("/login"),
                 child: multiColorSentence(
-                  text: ["DON'T HAVE AN ACCOUNT? ", "SIGN UP"],
+                  text: ["ALREADY HAVE AN ACCOUNT? ", "LOG IN"],
                   colors: [null, SWColor.blueLight],
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
