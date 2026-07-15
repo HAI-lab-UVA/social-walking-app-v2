@@ -6,7 +6,7 @@ import 'package:social_walking_2/views/scaffold_with_nav_bar/home/home_screen.da
 import 'package:social_walking_2/views/login/login_screen.dart';
 import 'package:social_walking_2/views/onboarding/onboarding_screen.dart';
 import 'package:social_walking_2/views/scaffold_with_nav_bar/scaffold_with_nav_bar.dart';
-import 'package:social_walking_2/views/signup/signup.dart';
+import 'package:social_walking_2/views/signup/signup_screen.dart';
 import 'package:social_walking_2/views/welcome/welcome_screen.dart';
 
 class RouterService {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:go_router/go_router.dart';
 import 'package:social_walking_2/repositories/auth_repository.dart';
 import 'package:social_walking_2/ui/simple_ui.dart';
 import 'package:social_walking_2/utils/ble_broadcaster.dart';
@@ -61,6 +62,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         customButton(text: "Start Scan", onPressed: startBLEScanning),
         customButton(text: "Start Broadcast", onPressed: startBLEBroadcasting),
         customButton(text: "Stop Broadcast", onPressed: stopBLEBroadcasting),
+        customButton(
+          text: "Logout",
+          onPressed: () {
+            ref.read(authRepositoryProvider).signOut();
+            context.go("/");
+          },
+        ),
       ],
     );
   }

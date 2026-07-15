@@ -95,6 +95,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -110,10 +111,11 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 textAlign: TextAlign.center,
               ),
               Spacer(),
-              googleButton(
-                text: "SIGN UP WITH GOOGLE",
-                onPressed: handleSignUpWithGoogle,
-              ),
+              if (!isKeyboardOpen)
+                googleButton(
+                  text: "SIGN UP WITH GOOGLE",
+                  onPressed: handleSignUpWithGoogle,
+                ),
               if (googleErrorText != null && googleErrorText != "")
                 Text(
                   googleErrorText!,
