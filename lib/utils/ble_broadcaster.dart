@@ -29,9 +29,8 @@ class BLEBroadcaster {
     final shortUid = uid.substring(0, 8);
     final AdvertiseData advertiseData = AdvertiseData(
       serviceUuid: serviceUuid,
-      includeDeviceName: false, // Keep false to save space
-      manufacturerId: 8765, // A unique ID for your app
-      manufacturerData: Uint8List.fromList([1, 2, 3]), // A tiny payload tag
+      includeDeviceName: false,
+      //localName: shortUid,
     );
 
     final AdvertiseSettings advertiseSettings = AdvertiseSettings(
