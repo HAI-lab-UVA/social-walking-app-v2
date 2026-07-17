@@ -87,3 +87,35 @@ Widget textInputField({
     },
   );
 }
+
+Widget dropdownMenu(
+  String hintText,
+  Map<String, dynamic> data,
+  TextEditingController controller,
+  BuildContext context,
+) {
+  final grayTextStyle = Theme.of(
+    context,
+  ).textTheme.bodyMedium!.copyWith(color: SWColor.gray);
+  return DropdownMenu(
+    textStyle: grayTextStyle,
+    controller: controller,
+    hintText: hintText,
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+      fillColor: SWColor.grayLight,
+      hintStyle: grayTextStyle,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(18.0),
+        borderSide: BorderSide.none,
+      ),
+      errorStyle: Theme.of(
+        context,
+      ).textTheme.bodySmall!.copyWith(color: SWColor.red),
+      errorMaxLines: 2,
+    ),
+    dropdownMenuEntries: data.entries
+        .map((e) => DropdownMenuEntry(value: e.value, label: e.key))
+        .toList(),
+  );
+}

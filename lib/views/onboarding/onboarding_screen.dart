@@ -18,6 +18,8 @@ class OnboadingScreen extends ConsumerStatefulWidget {
 class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController genderController = TextEditingController();
+
   final formKey = GlobalKey<FormState>();
   bool isProcessingOnboarding = false;
 
@@ -57,6 +59,7 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
   void dispose() {
     firstNameController.dispose();
     lastNameController.dispose();
+    genderController.dispose();
     super.dispose();
   }
 
@@ -112,6 +115,12 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
                 }
                 return null;
               },
+            ),
+            dropdownMenu(
+              "GENDER",
+              {for (var v in SWGender.values) v.formattedName: v},
+              genderController,
+              context,
             ),
           ],
         ),
