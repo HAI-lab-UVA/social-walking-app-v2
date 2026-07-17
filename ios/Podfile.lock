@@ -1266,6 +1266,12 @@ PODS:
     - nanopb (~> 3.30910.0)
   - FirebaseSharedSwift (12.15.0)
   - Flutter (1.0.0)
+  - flutter_ble_peripheral (2.0.1):
+    - Flutter
+    - FlutterMacOS
+  - flutter_blue_plus_darwin (0.0.2):
+    - Flutter
+    - FlutterMacOS
   - google_sign_in_ios (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -1419,6 +1425,8 @@ DEPENDENCIES:
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - Flutter (from `Flutter`)
+  - flutter_ble_peripheral (from `.symlinks/plugins/flutter_ble_peripheral/darwin`)
+  - flutter_blue_plus_darwin (from `.symlinks/plugins/flutter_blue_plus_darwin/darwin`)
   - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/darwin`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
 
@@ -1459,6 +1467,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_core/ios"
   Flutter:
     :path: Flutter
+  flutter_ble_peripheral:
+    :path: ".symlinks/plugins/flutter_ble_peripheral/darwin"
+  flutter_blue_plus_darwin:
+    :path: ".symlinks/plugins/flutter_blue_plus_darwin/darwin"
   google_sign_in_ios:
     :path: ".symlinks/plugins/google_sign_in_ios/darwin"
   path_provider_foundation:
@@ -1483,6 +1495,8 @@ SPEC CHECKSUMS:
   FirebaseFirestoreInternal: dd4800b1a2f0ca15c496092e9eaf037e89e34281
   FirebaseSharedSwift: 3f5c2758484d32099d693f269f110d3249c3f7e3
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
+  flutter_ble_peripheral: b141df08802a7f8be87a3fcdd1e04b933a5c5a40
+  flutter_blue_plus_darwin: ee2377ea51a6c9e481f2ed76ec597717ef5d287d
   google_sign_in_ios: 205742c688aea0e64db9da03c33121694a365109
   GoogleSignIn: e449a40a92e9f2eea56e98b5214d13725dc5a00a
   GoogleUtilities: 766ace00c6b10d8148408f329d10c4f051931850
