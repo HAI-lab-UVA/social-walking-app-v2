@@ -64,6 +64,7 @@ class RouterService {
           ],
         ),
       ],
+      // TODO: check if user exists too
       redirect: (BuildContext context, GoRouterState state) async {
         final currentUser = FirebaseAuth.instance.currentUser;
         final bool loggedIn = currentUser != null;
@@ -71,7 +72,10 @@ class RouterService {
             state.uri.path == '/' ||
             state.uri.path == '/login' ||
             state.uri.path == '/signup';
-        if (!loggedIn && !isAuthRoute) {
+
+        if (!loggedIn && state.uri.path == '/onboarding') {
+          return '/onboarding';
+        } else if (!loggedIn && !isAuthRoute) {
           return '/';
         }
         if (loggedIn && isAuthRoute) {
