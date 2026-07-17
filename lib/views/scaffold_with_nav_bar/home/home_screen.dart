@@ -24,7 +24,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         .first;
 
     await FlutterBluePlus.startScan(
-      withServices: [targetUuid],
+      //withServices: [targetUuid],
       timeout: const Duration(seconds: 15),
     );
 

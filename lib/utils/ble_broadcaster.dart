@@ -7,7 +7,7 @@ class BLEBroadcaster {
   final FlutterBlePeripheral blePeripheral = FlutterBlePeripheral();
 
   // key used to connect devices
-  final String serviceUuid = "00001818-0000-1000-8000-00805f9b34fb";
+  final String serviceUuid = "151e21bf-3688-bc3d-1867-2e5cc08b0302";
 
   Future<void> startBroadcasting(String uid) async {
     // check that broadcasting is supported
