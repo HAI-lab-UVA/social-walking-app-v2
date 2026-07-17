@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_ble_peripheral/flutter_ble_peripheral.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -28,8 +29,9 @@ class BLEBroadcaster {
     final shortUid = uid.substring(0, 8);
     final AdvertiseData advertiseData = AdvertiseData(
       serviceUuid: serviceUuid,
-      includeDeviceName: false,
-      localName: "ABC",
+      includeDeviceName: false, // Keep false to save space
+      manufacturerId: 8765, // A unique ID for your app
+      manufacturerData: Uint8List.fromList([1, 2, 3]), // A tiny payload tag
     );
 
     final AdvertiseSettings advertiseSettings = AdvertiseSettings(

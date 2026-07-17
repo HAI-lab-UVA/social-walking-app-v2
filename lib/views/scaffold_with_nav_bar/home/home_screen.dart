@@ -32,13 +32,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       for (ScanResult r in results) {
         final broadcastedName = r.advertisementData.advName;
         final serviceUuids = r.advertisementData.serviceUuids;
-        if (broadcastedName == "ABC") {
-          print("BROADCASTED NAME FOUND");
+        final manufacturerData = r.advertisementData.manufacturerData;
+
+        // 1. Look for our unique Manufacturer ID instead of a Name/UUID
+        if (manufacturerData.containsKey(8765)) {
+          print(
+            "🚨 FOUND ANDROID VIA MANUFACTURER ID! Raw UUIDs seen: $serviceUuids",
+          );
         }
-        if (serviceUuids.contains(targetUuid)) {
-          print("🚨 FOUND OUR APP! UUIDs: $serviceUuids");
-        } else if (broadcastedName.isNotEmpty) {
-          print("Found other device: $broadcastedName | UUIDs: $serviceUuids");
+        // 2. Keep this quiet unless you want to see other random devices
+        else if (broadcastedName.isNotEmpty) {
+          print("Found other device: $broadcastedName");
         }
       }
     }, onError: (e) => print("Error scanning: $e"));
