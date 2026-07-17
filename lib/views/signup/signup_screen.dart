@@ -160,7 +160,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       validator: (value) {
                         if (value == null || value == "") {
                           return "Password cannot be empty.";
-                        } else if (int.parse(value) < 8) {
+                        } else if (value.length < 8) {
                           return "Password must be at least 8 characters.";
                         }
                         return null;
@@ -173,7 +173,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       controller: passwordConfirmController,
                       context: context,
                       validator: (value) {
-                        if (value != passwordController.text) {
+                        if (value == null || value == "") {
+                          return "Please confirm your password.";
+                        } else if (value != passwordController.text) {
                           return "Passwords do not match.";
                         }
                         return null;
