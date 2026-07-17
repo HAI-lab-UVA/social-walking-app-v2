@@ -23,7 +23,7 @@ class BLEBroadcaster {
     final shortUid = uid.substring(0, 8);
     final AdvertiseData advertiseData = AdvertiseData(
       serviceUuid: serviceUuid,
-      localName: shortUid,
+      //localName: shortUid,
     );
 
     // start

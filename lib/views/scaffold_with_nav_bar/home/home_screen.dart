@@ -17,22 +17,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   final broadcaster = BLEBroadcaster();
 
   void startBLEScanning() async {
-    //final serviceUuid = Guid(broadcaster.serviceUuid);
     await FlutterBluePlus.adapterState
         .where((val) => val == BluetoothAdapterState.on)
         .first;
-    await FlutterBluePlus.startScan(
-      //withServices: [serviceUuid],
-      timeout: Duration(seconds: 15),
-    );
 
+    await FlutterBluePlus.startScan(timeout: const Duration(seconds: 15));
+
+    final targetUuid = Guid(broadcaster.serviceUuid);
     var subscription = FlutterBluePlus.scanResults.listen((results) {
       for (ScanResult r in results) {
         final broadcastedName = r.advertisementData.advName;
         final serviceUuids = r.advertisementData.serviceUuids;
-
-        if (broadcastedName.isNotEmpty) {
-          print("Found device: $broadcastedName | UUIDs: $serviceUuids");
+        if (serviceUuids.contains(targetUuid)) {
+          print("🚨 FOUND OUR APP! UUIDs: $serviceUuids");
+        } else if (broadcastedName.isNotEmpty) {
+          print("Found other device: $broadcastedName | UUIDs: $serviceUuids");
         }
       }
     }, onError: (e) => print("Error scanning: $e"));
