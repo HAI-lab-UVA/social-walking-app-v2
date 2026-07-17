@@ -24,7 +24,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         .first;
 
     await FlutterBluePlus.startScan(
-      withServices: [targetUuid],
+      //withServices: [targetUuid],
       timeout: const Duration(seconds: 15),
     );
 
@@ -32,6 +32,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       for (ScanResult r in results) {
         final broadcastedName = r.advertisementData.advName;
         final serviceUuids = r.advertisementData.serviceUuids;
+        if (broadcastedName == "ABC") {
+          print("BROADCASTED NAME FOUND");
+        }
         if (serviceUuids.contains(targetUuid)) {
           print("🚨 FOUND OUR APP! UUIDs: $serviceUuids");
         } else if (broadcastedName.isNotEmpty) {

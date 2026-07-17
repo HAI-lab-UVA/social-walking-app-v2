@@ -29,7 +29,7 @@ class BLEBroadcaster {
     final AdvertiseData advertiseData = AdvertiseData(
       serviceUuid: serviceUuid,
       includeDeviceName: false,
-      //localName: shortUid,
+      localName: "ABC",
     );
 
     final AdvertiseSettings advertiseSettings = AdvertiseSettings(
