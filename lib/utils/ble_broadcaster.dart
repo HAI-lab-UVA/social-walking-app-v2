@@ -1,4 +1,5 @@
 import 'package:flutter_ble_peripheral/flutter_ble_peripheral.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class BLEBroadcaster {
   final FlutterBlePeripheral blePeripheral = FlutterBlePeripheral();
@@ -11,8 +12,12 @@ class BLEBroadcaster {
     final bool isSupported = await blePeripheral.isSupported;
     if (!isSupported) {
       Exception("BLE Advertising is not supported on this device.");
+      print("BLE Advertising not supported");
       return;
     }
+
+    await Permission.bluetoothAdvertise.request();
+    await Permission.bluetoothConnect.request();
 
     // configure broadcasting
     final shortUid = uid.substring(0, 8);
