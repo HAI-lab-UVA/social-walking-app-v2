@@ -17,28 +17,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   final broadcaster = BLEBroadcaster();
 
   void startBLEScanning() async {
-    final serviceUuid = Guid(broadcaster.serviceUuid);
-    await FlutterBluePlus.adapterState.where((val) => val == BluetoothAdapterState.on).first;
+    //final serviceUuid = Guid(broadcaster.serviceUuid);
+    await FlutterBluePlus.adapterState
+        .where((val) => val == BluetoothAdapterState.on)
+        .first;
     await FlutterBluePlus.startScan(
-      withServices: [serviceUuid],
+      //withServices: [serviceUuid],
       timeout: Duration(seconds: 15),
     );
 
-    // listen to scan results
     var subscription = FlutterBluePlus.scanResults.listen((results) {
       for (ScanResult r in results) {
-        // 1. Read the name broadcasted by the other phone
-        String broadcastedName = r.advertisementData.advName;
+        final broadcastedName = r.advertisementData.advName;
+        final serviceUuids = r.advertisementData.serviceUuids;
 
-        // 2. Read the Service UUIDs (to double-check it's your app)
-        List<Guid> serviceUuids = r.advertisementData.serviceUuids;
-
-        if (broadcastedName.isNotEmpty && serviceUuids.contains(serviceUuid)) {
-          print("found: $broadcastedName");
-        } else {
-          print(
-            "broadcastName.isNotEmpty: ${broadcastedName.isNotEmpty} and serviceUuids ${serviceUuids}",
-          );
+        if (broadcastedName.isNotEmpty) {
+          print("Found device: $broadcastedName | UUIDs: $serviceUuids");
         }
       }
     }, onError: (e) => print("Error scanning: $e"));

@@ -15,15 +15,16 @@ class BLEBroadcaster {
     }
 
     // configure broadcasting
+    final shortUid = uid.substring(0, 8);
     final AdvertiseData advertiseData = AdvertiseData(
       serviceUuid: serviceUuid,
-      localName: uid,
+      localName: shortUid,
     );
 
     // start
     try {
       await blePeripheral.start(advertiseData: advertiseData);
-      print("Broadcasting as $uid...");
+      print("Broadcasting as $shortUid...");
     } catch (e) {
       print("Failed to start broadcasting: $e");
     }
