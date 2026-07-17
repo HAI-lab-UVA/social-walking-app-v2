@@ -18,6 +18,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   void startBLEScanning() async {
     final serviceUuid = Guid(broadcaster.serviceUuid);
+    await FlutterBluePlus.adapterState.where((val) => val == BluetoothAdapterState.on).first;
     await FlutterBluePlus.startScan(
       withServices: [serviceUuid],
       timeout: Duration(seconds: 15),
