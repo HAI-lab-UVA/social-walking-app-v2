@@ -1,4 +1,5 @@
 import 'package:flutter_ble_peripheral/flutter_ble_peripheral.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class BLEBroadcaster {
@@ -16,6 +17,10 @@ class BLEBroadcaster {
       return;
     }
 
+    await FlutterBluePlus.adapterState
+        .where((val) => val == BluetoothAdapterState.on)
+        .first;
+
     await Permission.bluetoothAdvertise.request();
     await Permission.bluetoothConnect.request();
 
@@ -23,12 +28,23 @@ class BLEBroadcaster {
     final shortUid = uid.substring(0, 8);
     final AdvertiseData advertiseData = AdvertiseData(
       serviceUuid: serviceUuid,
+      includeDeviceName: false,
       //localName: shortUid,
     );
 
-    // start
+    final AdvertiseSettings advertiseSettings = AdvertiseSettings(
+      advertiseMode: AdvertiseMode.advertiseModeBalanced,
+      txPowerLevel: AdvertiseTxPower.advertiseTxPowerMedium,
+      connectable: true,
+      timeout: 0, // 0 means no timeout
+    );
+
     try {
-      await blePeripheral.start(advertiseData: advertiseData);
+      // Pass the settings to the start method
+      await blePeripheral.start(
+        advertiseData: advertiseData,
+        advertiseSettings: advertiseSettings,
+      );
       print("Broadcasting as $shortUid...");
     } catch (e) {
       print("Failed to start broadcasting: $e");

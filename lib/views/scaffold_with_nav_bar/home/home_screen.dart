@@ -17,13 +17,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   final broadcaster = BLEBroadcaster();
 
   void startBLEScanning() async {
+    final targetUuid = Guid(broadcaster.serviceUuid);
+
     await FlutterBluePlus.adapterState
         .where((val) => val == BluetoothAdapterState.on)
         .first;
 
-    await FlutterBluePlus.startScan(timeout: const Duration(seconds: 15));
+    await FlutterBluePlus.startScan(
+      withServices: [targetUuid],
+      timeout: const Duration(seconds: 15),
+    );
 
-    final targetUuid = Guid(broadcaster.serviceUuid);
     var subscription = FlutterBluePlus.scanResults.listen((results) {
       for (ScanResult r in results) {
         final broadcastedName = r.advertisementData.advName;
