@@ -59,6 +59,8 @@ Widget textInputField({
   required BuildContext context,
   required String? Function(String?)? validator,
   bool? isObscured,
+  TextInputType? keyboardType,
+  List<String>? autofillHints,
 }) {
   final grayTextStyle = Theme.of(
     context,
@@ -66,6 +68,8 @@ Widget textInputField({
   return TextFormField(
     style: grayTextStyle,
     controller: controller,
+    keyboardType: keyboardType,
+    autofillHints: autofillHints,
     decoration: InputDecoration(
       filled: true,
       fillColor: SWColor.grayLight,

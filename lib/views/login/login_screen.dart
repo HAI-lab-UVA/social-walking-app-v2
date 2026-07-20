@@ -159,6 +159,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         }
                         return null;
                       },
+                      keyboardType: TextInputType.emailAddress,
                     ),
                     textInputField(
                       hintText: "PASSWORD",

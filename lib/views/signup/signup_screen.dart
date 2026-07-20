@@ -152,6 +152,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         }
                         return null;
                       },
+
+                      keyboardType: TextInputType.emailAddress,
                     ),
                     textInputField(
                       hintText: "PASSWORD",
