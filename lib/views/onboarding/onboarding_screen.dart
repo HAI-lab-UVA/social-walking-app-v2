@@ -38,7 +38,7 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
           lastName: lastNameController.text,
           pronouns: "placeholder",
           dateOfBirth: DateTime.now(),
-          gender: SWGender.female,
+          gender: SWGender.values.byName(genderController.text),
           biography: "placeholder",
           profileImageURL: null,
         );
@@ -91,38 +91,42 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
       SizedBox(height: 30),
       Form(
         key: formKey,
-        child: Column(
-          spacing: 8.0,
-          children: [
-            textInputField(
-              hintText: "FIRST NAME",
-              controller: firstNameController,
-              context: context,
-              validator: (value) {
-                if (value == null || value.replaceAll(" ", "") == "") {
-                  return "First name cannot be blank.";
-                }
-                return null;
-              },
-            ),
-            textInputField(
-              hintText: "LAST NAME",
-              controller: lastNameController,
-              context: context,
-              validator: (value) {
-                if (value == null || value.replaceAll(" ", "") == "") {
-                  return "Last name cannot be blank.";
-                }
-                return null;
-              },
-            ),
-            dropdownMenu(
-              "GENDER",
-              {for (var v in SWGender.values) v.formattedName: v},
-              genderController,
-              context,
-            ),
-          ],
+        child: IntrinsicWidth(
+          child: Column(
+            spacing: 8.0,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              textInputField(
+                hintText: "FIRST NAME",
+                controller: firstNameController,
+                context: context,
+                validator: (value) {
+                  if (value == null || value.replaceAll(" ", "") == "") {
+                    return "First name cannot be blank.";
+                  }
+                  return null;
+                },
+              ),
+              textInputField(
+                hintText: "LAST NAME",
+                controller: lastNameController,
+                context: context,
+                validator: (value) {
+                  if (value == null || value.replaceAll(" ", "") == "") {
+                    return "Last name cannot be blank.";
+                  }
+                  return null;
+                },
+              ),
+              dropdownMenu(
+                "GENDER",
+                {for (var v in SWGender.values) v.formattedName: v},
+                genderController,
+                context,
+              ),
+            ],
+          ),
         ),
       ),
       customButton(

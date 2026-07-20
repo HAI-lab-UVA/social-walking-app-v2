@@ -115,7 +115,20 @@ Widget dropdownMenu(
       errorMaxLines: 2,
     ),
     dropdownMenuEntries: data.entries
-        .map((e) => DropdownMenuEntry(value: e.value, label: e.key))
+        .map(
+          (e) => DropdownMenuEntry(
+            value: e.value,
+            label: e.key,
+            style: ButtonStyle(
+              foregroundColor: WidgetStateProperty.all(SWColor.gray),
+              backgroundColor: WidgetStateProperty.all(SWColor.grayLight),
+            ),
+          ),
+        )
         .toList(),
+    menuStyle: MenuStyle(
+      backgroundColor: WidgetStateProperty.all(SWColor.grayLight),
+    ),
+    expandedInsets: EdgeInsets.zero,
   );
 }
