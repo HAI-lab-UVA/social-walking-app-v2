@@ -1,7 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:social_walking_2/ui/sw_color.dart';
 import 'package:social_walking_2/router_service.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,23 +9,16 @@ import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
-  // listen for auth changes and referesh router
-  final router = RouterService().router;
-  FirebaseAuth.instance.authStateChanges().listen(
-    (User? user) => router.refresh(),
-  );
-
-  runApp(ProviderScope(child: MyApp(router: router)));
+  runApp(ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({required this.router, super.key});
-  final GoRouter router;
+class MyApp extends ConsumerWidget {
+  const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(routerProvider);
     return MaterialApp.router(
       title: 'Social Walking',
       theme: ThemeData(

@@ -20,7 +20,25 @@ class UserRepository {
     });
   }
 
+  Stream<SWUser> getCurrentUser() {
+    final uid = authRepository.getCurrentUserId();
+    final docRef = db.collection("sw2_users").doc(uid);
+    return docRef.snapshots().map((doc) {
+      if (doc.exists) {
+        return SWUser.fromJson(doc.data()!);
+      } else {
+        throw Exception("User with id $uid does not exist");
+      }
+    });
+  }
+
   Future<bool> userExists(String uid) async {
+    final doc = await db.collection("sw2_users").doc(uid).get();
+    return doc.exists;
+  }
+
+  Future<bool> currentUserExists() async {
+    final uid = authRepository.getCurrentUserId();
     final doc = await db.collection("sw2_users").doc(uid).get();
     return doc.exists;
   }
