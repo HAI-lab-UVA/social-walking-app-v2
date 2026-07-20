@@ -18,7 +18,8 @@ class OnboadingScreen extends ConsumerStatefulWidget {
 class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
-  final TextEditingController genderController = TextEditingController();
+  late String pronouns;
+  late SWGender gender;
 
   final formKey = GlobalKey<FormState>();
   bool isProcessingOnboarding = false;
@@ -36,9 +37,9 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
           fcmToken: "placeholder",
           firstName: firstNameController.text,
           lastName: lastNameController.text,
-          pronouns: "placeholder",
+          pronouns: pronouns,
           dateOfBirth: DateTime.now(),
-          gender: SWGender.values.byName(genderController.text),
+          gender: gender,
           biography: "placeholder",
           profileImageURL: null,
         );
@@ -59,7 +60,6 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
   void dispose() {
     firstNameController.dispose();
     lastNameController.dispose();
-    genderController.dispose();
     super.dispose();
   }
 
@@ -120,10 +120,40 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
                 },
               ),
               dropdownMenu(
-                "GENDER",
-                {for (var v in SWGender.values) v.formattedName: v},
-                genderController,
-                context,
+                hintText: "GENDER",
+                data: SWGender.values.map((e) => e.formattedName).toList(),
+                context: context,
+                onChanged: (v) {
+                  setState(() {
+                    if (v != null) {
+                      gender = SWGender.values.byName(v);
+                    }
+                  });
+                },
+                validator: (value) {
+                  if (value == null || value == "") {
+                    return "Gender cannot be blank.";
+                  }
+                  return null;
+                },
+              ),
+              dropdownMenuWithSearch(
+                hintText: "PRONOUNS",
+                data: pronounsList,
+                context: context,
+                onChanged: (v) {
+                  setState(() {
+                    if (v != null) {
+                      pronouns = v;
+                    }
+                  });
+                },
+                validator: (value) {
+                  if (value == null || value == "") {
+                    return "Pronouns cannot be blank.";
+                  }
+                  return null;
+                },
               ),
             ],
           ),

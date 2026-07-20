@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:social_walking_2/ui/sw_color.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -92,47 +93,195 @@ Widget textInputField({
   );
 }
 
-Widget dropdownMenu(
-  String hintText,
-  Map<String, dynamic> data,
-  TextEditingController controller,
-  BuildContext context,
-) {
+// Widget dropdownMenu({
+//   required String hintText,
+//   required List<String> data,
+//   required TextEditingController controller,
+//   required BuildContext context,
+// }) {
+//   final grayTextStyle = Theme.of(
+//     context,
+//   ).textTheme.bodyMedium!.copyWith(color: SWColor.gray);
+//   return DropdownMenu(
+//     textStyle: grayTextStyle,
+//     controller: controller,
+//     hintText: hintText,
+//     inputDecorationTheme: InputDecorationTheme(
+//       filled: true,
+//       fillColor: SWColor.grayLight,
+//       hintStyle: grayTextStyle,
+//       border: OutlineInputBorder(
+//         borderRadius: BorderRadius.circular(18.0),
+//         borderSide: BorderSide.none,
+//       ),
+//       errorStyle: Theme.of(
+//         context,
+//       ).textTheme.bodySmall!.copyWith(color: SWColor.red),
+//       errorMaxLines: 2,
+//     ),
+//     dropdownMenuEntries: data
+//         .map(
+//           (e) => DropdownMenuEntry(
+//             value: e,
+//             label: e,
+//             style: ButtonStyle(
+//               foregroundColor: WidgetStateProperty.all(SWColor.gray),
+//               backgroundColor: WidgetStateProperty.all(SWColor.grayLight),
+//             ),
+//           ),
+//         )
+//         .toList(),
+//     menuStyle: MenuStyle(
+//       backgroundColor: WidgetStateProperty.all(SWColor.grayLight),
+//     ),
+//     expandedInsets: EdgeInsets.zero,
+//   );
+// }
+
+Widget dropdownMenu({
+  required String hintText,
+  required List<String> data,
+  required BuildContext context,
+  required void Function(String?) onChanged,
+  required String? Function(String?)? validator,
+}) {
   final grayTextStyle = Theme.of(
     context,
   ).textTheme.bodyMedium!.copyWith(color: SWColor.gray);
-  return DropdownMenu(
-    textStyle: grayTextStyle,
-    controller: controller,
-    hintText: hintText,
-    inputDecorationTheme: InputDecorationTheme(
-      filled: true,
-      fillColor: SWColor.grayLight,
-      hintStyle: grayTextStyle,
-      border: OutlineInputBorder(
+  return DropdownSearch<String>(
+    onChanged: onChanged,
+    popupProps: PopupProps.menu(
+      showSearchBox: false,
+      fit: FlexFit.loose,
+      menuProps: MenuProps(
         borderRadius: BorderRadius.circular(18.0),
-        borderSide: BorderSide.none,
+        backgroundColor: SWColor.white,
       ),
-      errorStyle: Theme.of(
-        context,
-      ).textTheme.bodySmall!.copyWith(color: SWColor.red),
-      errorMaxLines: 2,
-    ),
-    dropdownMenuEntries: data.entries
-        .map(
-          (e) => DropdownMenuEntry(
-            value: e.value,
-            label: e.key,
-            style: ButtonStyle(
-              foregroundColor: WidgetStateProperty.all(SWColor.gray),
-              backgroundColor: WidgetStateProperty.all(SWColor.grayLight),
-            ),
+      itemBuilder: (context, item, isDisabled, isSelected) {
+        return Padding(
+          padding: const EdgeInsets.only(top: 4.0, bottom: 8.0, left: 16.0),
+          child: Text(
+            item,
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium!.copyWith(color: SWColor.gray),
           ),
-        )
-        .toList(),
-    menuStyle: MenuStyle(
-      backgroundColor: WidgetStateProperty.all(SWColor.grayLight),
+        );
+      },
     ),
-    expandedInsets: EdgeInsets.zero,
+    items: (filter, loadProps) {
+      return data.where((item) {
+        return item.toLowerCase().startsWith(filter.toLowerCase());
+      }).toList();
+    },
+    decoratorProps: DropDownDecoratorProps(
+      baseStyle: grayTextStyle,
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: SWColor.grayLight,
+        hintText: hintText,
+        hintStyle: grayTextStyle,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(18.0),
+          borderSide: BorderSide.none,
+        ),
+        errorStyle: Theme.of(
+          context,
+        ).textTheme.bodySmall!.copyWith(color: SWColor.red),
+        errorMaxLines: 2,
+      ),
+    ),
+    validator: validator,
+  );
+}
+
+Widget dropdownMenuWithSearch({
+  required String hintText,
+  required List<String> data,
+  required BuildContext context,
+  required void Function(String?) onChanged,
+  required String? Function(String?)? validator,
+}) {
+  final grayTextStyle = Theme.of(
+    context,
+  ).textTheme.bodyMedium!.copyWith(color: SWColor.gray);
+  return DropdownSearch<String>(
+    onChanged: onChanged,
+    popupProps: PopupProps.menu(
+      showSearchBox: true,
+      fit: FlexFit.loose,
+      emptyBuilder: (context, searchEntry) {
+        if (searchEntry.isEmpty) {
+          return SizedBox.shrink();
+        } else {
+          return Center(
+            child: Text(
+              "No matches found.",
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium!.copyWith(color: SWColor.gray),
+            ),
+          );
+        }
+      },
+
+      menuProps: MenuProps(
+        borderRadius: BorderRadius.circular(18.0),
+        backgroundColor: SWColor.white,
+      ),
+      searchFieldProps: TextFieldProps(
+        style: grayTextStyle,
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: SWColor.grayLight,
+          hintText: "Search here...",
+          hintStyle: grayTextStyle,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(18.0),
+            borderSide: BorderSide.none,
+          ),
+          errorStyle: Theme.of(
+            context,
+          ).textTheme.bodySmall!.copyWith(color: SWColor.red),
+          errorMaxLines: 2,
+        ),
+      ),
+
+      itemBuilder: (context, item, isDisabled, isSelected) {
+        return Padding(
+          padding: const EdgeInsets.only(top: 4.0, bottom: 8.0, left: 16.0),
+          child: Text(
+            item,
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium!.copyWith(color: SWColor.gray),
+          ),
+        );
+      },
+    ),
+    items: (filter, loadProps) {
+      if (filter.isEmpty) return [];
+      return data.where((item) {
+        return item.toLowerCase().startsWith(filter.toLowerCase());
+      }).toList();
+    },
+    decoratorProps: DropDownDecoratorProps(
+      baseStyle: grayTextStyle,
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: SWColor.grayLight,
+        hintText: hintText,
+        hintStyle: grayTextStyle,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(18.0),
+          borderSide: BorderSide.none,
+        ),
+        errorStyle: Theme.of(
+          context,
+        ).textTheme.bodySmall!.copyWith(color: SWColor.red),
+        errorMaxLines: 2,
+      ),
+    ),
+    validator: validator,
   );
 }

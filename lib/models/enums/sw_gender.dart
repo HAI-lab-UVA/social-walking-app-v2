@@ -25,3 +25,17 @@ extension SWGenderExtension on SWGender {
     }
   }
 }
+
+final pronounsList = [
+  "she/her",
+  "he/him",
+  "they/them",
+  "she/they",
+  "he/they",
+  "they/she",
+  "they/he",
+  "she/he",
+  "he/she",
+  "Any Pronouns",
+  "Prefer Not To Say",
+];
