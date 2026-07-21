@@ -37,7 +37,6 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
           fcmToken: "placeholder",
           firstName: firstNameController.text,
           lastName: lastNameController.text,
-          pronouns: pronouns,
           dateOfBirth: DateTime.now(),
           gender: gender,
           biography: "placeholder",
@@ -133,24 +132,6 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
                 validator: (value) {
                   if (value == null || value == "") {
                     return "Gender cannot be blank.";
-                  }
-                  return null;
-                },
-              ),
-              dropdownMenuWithSearch(
-                hintText: "PRONOUNS",
-                data: pronounsList,
-                context: context,
-                onChanged: (v) {
-                  setState(() {
-                    if (v != null) {
-                      pronouns = v;
-                    }
-                  });
-                },
-                validator: (value) {
-                  if (value == null || value == "") {
-                    return "Pronouns cannot be blank.";
                   }
                   return null;
                 },

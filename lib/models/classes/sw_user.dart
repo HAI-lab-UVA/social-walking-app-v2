@@ -10,11 +10,11 @@ class SWUser {
   String fcmToken;
   String firstName;
   String lastName;
-  String pronouns;
   DateTime dateOfBirth;
   SWGender gender;
   String biography;
   String? profileImageURL;
+  late String pronouns;
   late List<SWWalkPreference> walkPreferences;
   late Map<String, int> walkedWith = {};
   late List<String> chattedWith = [];
@@ -31,11 +31,11 @@ class SWUser {
     required this.fcmToken,
     required this.firstName,
     required this.lastName,
-    required this.pronouns,
     required this.dateOfBirth,
     required this.gender,
     required this.biography,
     required this.profileImageURL,
+    String? pronouns,
     List<SWWalkPreference>? walkPreferences,
     Map<String, int>? walkedWith,
     List<String>? chattedWith,
@@ -46,6 +46,7 @@ class SWUser {
     bool? finishedSetup,
     this.location,
   }) {
+    this.pronouns = pronouns ?? "";
     this.walkPreferences = walkPreferences ?? [];
     this.walkedWith = walkedWith ?? {};
     this.chattedWith = chattedWith ?? [];
