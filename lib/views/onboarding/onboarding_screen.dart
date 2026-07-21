@@ -7,6 +7,7 @@ import 'package:social_walking_2/repositories/auth_repository.dart';
 import 'package:social_walking_2/repositories/user_repository.dart';
 import 'package:social_walking_2/ui/simple_ui.dart';
 import 'package:social_walking_2/ui/sw_color.dart';
+import 'package:intl/intl.dart';
 
 class OnboadingScreen extends ConsumerStatefulWidget {
   const OnboadingScreen({super.key});
@@ -18,6 +19,8 @@ class OnboadingScreen extends ConsumerStatefulWidget {
 class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController dateOfBirthController = TextEditingController();
+  late DateTime dateOfBirth;
   late String pronouns;
   late SWGender gender;
 
@@ -37,7 +40,7 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
           fcmToken: "placeholder",
           firstName: firstNameController.text,
           lastName: lastNameController.text,
-          dateOfBirth: DateTime.now(),
+          dateOfBirth: dateOfBirth,
           gender: gender,
           biography: "placeholder",
           profileImageURL: null,
@@ -59,6 +62,7 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
   void dispose() {
     firstNameController.dispose();
     lastNameController.dispose();
+    dateOfBirthController.dispose();
     super.dispose();
   }
 
@@ -134,6 +138,31 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
                     return "Gender cannot be blank.";
                   }
                   return null;
+                },
+              ),
+              tappableReadOnlyInputField(
+                hintText: "DATE OF BIRTH",
+                controller: dateOfBirthController,
+                context: context,
+                onTap: () async {
+                  final pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime.now().subtract(
+                      Duration(days: 365 * 100),
+                    ),
+                    lastDate: DateTime.now(),
+                  );
+                  if (pickedDate != null) {
+                    if (mounted) {
+                      setState(() {
+                        dateOfBirth = pickedDate;
+                        dateOfBirthController.text = DateFormat(
+                          'MM-dd-yyyy',
+                        ).format(pickedDate);
+                      });
+                    }
+                  }
                 },
               ),
             ],

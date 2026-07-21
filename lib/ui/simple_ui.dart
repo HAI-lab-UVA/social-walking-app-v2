@@ -93,50 +93,36 @@ Widget textInputField({
   );
 }
 
-// Widget dropdownMenu({
-//   required String hintText,
-//   required List<String> data,
-//   required TextEditingController controller,
-//   required BuildContext context,
-// }) {
-//   final grayTextStyle = Theme.of(
-//     context,
-//   ).textTheme.bodyMedium!.copyWith(color: SWColor.gray);
-//   return DropdownMenu(
-//     textStyle: grayTextStyle,
-//     controller: controller,
-//     hintText: hintText,
-//     inputDecorationTheme: InputDecorationTheme(
-//       filled: true,
-//       fillColor: SWColor.grayLight,
-//       hintStyle: grayTextStyle,
-//       border: OutlineInputBorder(
-//         borderRadius: BorderRadius.circular(18.0),
-//         borderSide: BorderSide.none,
-//       ),
-//       errorStyle: Theme.of(
-//         context,
-//       ).textTheme.bodySmall!.copyWith(color: SWColor.red),
-//       errorMaxLines: 2,
-//     ),
-//     dropdownMenuEntries: data
-//         .map(
-//           (e) => DropdownMenuEntry(
-//             value: e,
-//             label: e,
-//             style: ButtonStyle(
-//               foregroundColor: WidgetStateProperty.all(SWColor.gray),
-//               backgroundColor: WidgetStateProperty.all(SWColor.grayLight),
-//             ),
-//           ),
-//         )
-//         .toList(),
-//     menuStyle: MenuStyle(
-//       backgroundColor: WidgetStateProperty.all(SWColor.grayLight),
-//     ),
-//     expandedInsets: EdgeInsets.zero,
-//   );
-// }
+Widget tappableReadOnlyInputField({
+  required String hintText,
+  required TextEditingController controller,
+  required BuildContext context,
+  required void Function()? onTap,
+}) {
+  final grayTextStyle = Theme.of(
+    context,
+  ).textTheme.bodyMedium!.copyWith(color: SWColor.gray);
+  return TextFormField(
+    readOnly: true,
+    onTap: onTap,
+    style: grayTextStyle,
+    controller: controller,
+    decoration: InputDecoration(
+      filled: true,
+      fillColor: SWColor.grayLight,
+      hintText: hintText,
+      hintStyle: grayTextStyle,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(18.0),
+        borderSide: BorderSide.none,
+      ),
+      errorStyle: Theme.of(
+        context,
+      ).textTheme.bodySmall!.copyWith(color: SWColor.red),
+      errorMaxLines: 2,
+    ),
+  );
+}
 
 Widget dropdownMenu({
   required String hintText,
