@@ -140,6 +140,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       hintText: "EMAIL",
                       controller: emailController,
                       context: context,
+                      maxLength: 100,
+                      maxLines: 1,
+                      minLines: 1,
+                      showCounterText: false,
                       validator: (value) {
                         final emailRegex = RegExp(
                           r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
@@ -159,6 +163,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       hintText: "PASSWORD",
                       controller: passwordController,
                       context: context,
+                      maxLength: 100,
+                      maxLines: 1,
+                      minLines: 1,
+                      showCounterText: false,
                       validator: (value) {
                         if (value == null || value == "") {
                           return "Password cannot be empty.";
@@ -174,6 +182,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                       hintText: "CONFIRM PASSWORD",
                       controller: passwordConfirmController,
                       context: context,
+                      maxLength: 100,
+                      maxLines: 1,
+                      minLines: 1,
+                      showCounterText: false,
                       validator: (value) {
                         if (value == null || value == "") {
                           return "Please confirm your password.";

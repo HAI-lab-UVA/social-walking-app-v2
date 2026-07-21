@@ -59,6 +59,10 @@ Widget textInputField({
   required TextEditingController controller,
   required BuildContext context,
   required String? Function(String?)? validator,
+  required int maxLength,
+  required int maxLines,
+  required int minLines,
+  required bool showCounterText,
   bool? isObscured,
   TextInputType? keyboardType,
   List<String>? autofillHints,
@@ -71,7 +75,11 @@ Widget textInputField({
     controller: controller,
     keyboardType: keyboardType,
     autofillHints: autofillHints,
+    maxLines: maxLines,
+    maxLength: maxLength,
+    minLines: minLines,
     decoration: InputDecoration(
+      counterText: showCounterText ? null : "",
       filled: true,
       fillColor: SWColor.grayLight,
       hintText: hintText,
@@ -97,6 +105,7 @@ Widget tappableReadOnlyInputField({
   required String hintText,
   required TextEditingController controller,
   required BuildContext context,
+  required String? Function(String?)? validator,
   required void Function()? onTap,
 }) {
   final grayTextStyle = Theme.of(
@@ -121,6 +130,7 @@ Widget tappableReadOnlyInputField({
       ).textTheme.bodySmall!.copyWith(color: SWColor.red),
       errorMaxLines: 2,
     ),
+    validator: validator,
   );
 }
 

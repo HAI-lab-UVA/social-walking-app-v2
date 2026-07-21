@@ -12,9 +12,9 @@ class SWUser {
   String lastName;
   DateTime dateOfBirth;
   SWGender gender;
-  String biography;
   String? profileImageURL;
   late String pronouns;
+  late String biography;
   late List<SWWalkPreference> walkPreferences;
   late Map<String, int> walkedWith = {};
   late List<String> chattedWith = [];
@@ -33,9 +33,9 @@ class SWUser {
     required this.lastName,
     required this.dateOfBirth,
     required this.gender,
-    required this.biography,
     required this.profileImageURL,
     String? pronouns,
+    String? biography,
     List<SWWalkPreference>? walkPreferences,
     Map<String, int>? walkedWith,
     List<String>? chattedWith,
@@ -47,6 +47,7 @@ class SWUser {
     this.location,
   }) {
     this.pronouns = pronouns ?? "";
+    this.biography = biography ?? "";
     this.walkPreferences = walkPreferences ?? [];
     this.walkedWith = walkedWith ?? {};
     this.chattedWith = chattedWith ?? [];

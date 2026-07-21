@@ -20,6 +20,8 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController dateOfBirthController = TextEditingController();
+  final TextEditingController bioController = TextEditingController();
+
   late DateTime dateOfBirth;
   late String pronouns;
   late SWGender gender;
@@ -42,7 +44,7 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
           lastName: lastNameController.text,
           dateOfBirth: dateOfBirth,
           gender: gender,
-          biography: "placeholder",
+          biography: bioController.text,
           profileImageURL: null,
         );
         ref.read(userRepositoryProvider).createUser(uid, newUser).then((_) {
@@ -63,6 +65,7 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
     firstNameController.dispose();
     lastNameController.dispose();
     dateOfBirthController.dispose();
+    bioController.dispose();
     super.dispose();
   }
 
@@ -74,21 +77,21 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
         "Hello! Welcome to the Social Walking Community",
         style: Theme.of(
           context,
-        ).textTheme.titleLarge!.copyWith(color: SWColor.white),
+        ).textTheme.titleLarge!.copyWith(color: SWColor.black),
         textAlign: TextAlign.center,
       ),
       Text(
         "First, tell us about yourself",
         style: Theme.of(
           context,
-        ).textTheme.titleMedium!.copyWith(color: SWColor.white),
+        ).textTheme.titleMedium!.copyWith(color: SWColor.black),
         textAlign: TextAlign.center,
       ),
       Text(
         "(You can change this information later)",
         style: Theme.of(
           context,
-        ).textTheme.bodySmall!.copyWith(color: SWColor.white),
+        ).textTheme.bodySmall!.copyWith(color: SWColor.black),
         textAlign: TextAlign.center,
       ),
       SizedBox(height: 30),
@@ -104,6 +107,10 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
                 hintText: "FIRST NAME",
                 controller: firstNameController,
                 context: context,
+                maxLength: 25,
+                maxLines: 1,
+                minLines: 1,
+                showCounterText: false,
                 validator: (value) {
                   if (value == null || value.replaceAll(" ", "") == "") {
                     return "First name cannot be blank.";
@@ -115,6 +122,10 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
                 hintText: "LAST NAME",
                 controller: lastNameController,
                 context: context,
+                maxLength: 25,
+                maxLines: 1,
+                minLines: 1,
+                showCounterText: false,
                 validator: (value) {
                   if (value == null || value.replaceAll(" ", "") == "") {
                     return "Last name cannot be blank.";
@@ -144,6 +155,12 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
                 hintText: "DATE OF BIRTH",
                 controller: dateOfBirthController,
                 context: context,
+                validator: (value) {
+                  if (value == null || value == "") {
+                    return "Date of birth cannot be blank.";
+                  }
+                  return null;
+                },
                 onTap: () async {
                   final pickedDate = await showDatePicker(
                     context: context,
@@ -165,6 +182,27 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
                   }
                 },
               ),
+              Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: Text(
+                  "YOUR BIO",
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium!.copyWith(color: SWColor.black),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              textInputField(
+                hintText:
+                    "Tell others about yourself. What are your interests?",
+                controller: bioController,
+                context: context,
+                maxLength: 400,
+                maxLines: 5,
+                minLines: 5,
+                showCounterText: true,
+                validator: null,
+              ),
             ],
           ),
         ),
@@ -172,13 +210,13 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
       customButton(
         text: "LET'S GO!",
         onPressed: createAccount,
-        backgroundColor: SWColor.blue,
+        backgroundColor: SWColor.blueLight,
       ),
 
-      SizedBox(height: 30),
+      SizedBox(height: 100),
     ];
     return Scaffold(
-      backgroundColor: SWColor.blueLight,
+      backgroundColor: SWColor.white,
       body: SafeArea(
         child: ListView.separated(
           padding: const EdgeInsets.all(8.0),
