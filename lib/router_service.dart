@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:social_walking_2/repositories/auth_repository.dart';
 import 'package:social_walking_2/views/auth_check/auth_check_screen.dart';
+import 'package:social_walking_2/views/permission_request/permission_request_screen.dart';
 import 'package:social_walking_2/views/scaffold_with_nav_bar/cowalks/cowalks_screen.dart';
 import 'package:social_walking_2/views/scaffold_with_nav_bar/home/home_screen.dart';
 import 'package:social_walking_2/views/login/login_screen.dart';
@@ -40,6 +41,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         name: 'onboarding',
         path: '/onboarding',
         builder: (context, state) => OnboadingScreen(),
+      ),
+      GoRoute(
+        name: 'permission-request',
+        path: '/permission-request',
+        builder: (context, state) => PermissionRequestScreen(),
       ),
       GoRoute(
         name: 'auth-check',

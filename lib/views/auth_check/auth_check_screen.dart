@@ -26,7 +26,7 @@ class _AuthCheckScreenState extends ConsumerState<AuthCheckScreen> {
       if (currentUser.finishedSetup) {
         context.go("/home");
       } else {
-        context.go("/onboarding");
+        context.go("/permission-request");
       }
     } else {
       context.go("/onboarding");

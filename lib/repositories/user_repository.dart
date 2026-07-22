@@ -46,6 +46,27 @@ class UserRepository {
   Future<void> createUser(String uid, SWUser user) async {
     await db.collection("sw2_users").doc(uid).set(user.toJson());
   }
+
+  Future<void> updateUserInfo({
+    required String uid,
+    required String key,
+    required dynamic value,
+    dynamic Function(dynamic existingValue, dynamic newValue)?
+    updateExistingValue,
+  }) async {
+    if (updateExistingValue != null) {
+      final docSnapshot = await db.collection('users').doc(uid).get();
+      final existingValue = docSnapshot.data()![key];
+      final updatedValue = updateExistingValue(existingValue, value);
+      await db.collection('sw2_users').doc(uid).update({key: updatedValue});
+    } else {
+      await db.collection('sw2_users').doc(uid).update({key: value});
+    }
+  }
+
+  Future<void> finishUserSetup({required String uid}) async {
+    await updateUserInfo(uid: uid, key: "finishedSetup", value: true);
+  }
 }
 
 final Provider<UserRepository> userRepositoryProvider =
