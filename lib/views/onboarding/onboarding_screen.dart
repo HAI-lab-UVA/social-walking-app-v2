@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:social_walking_2/models/classes/sw_user.dart';
 import 'package:social_walking_2/models/enums/sw_gender.dart';
+import 'package:social_walking_2/models/enums/sw_walk_preference.dart';
 import 'package:social_walking_2/repositories/auth_repository.dart';
 import 'package:social_walking_2/repositories/user_repository.dart';
 import 'package:social_walking_2/ui/simple_ui.dart';
@@ -25,6 +26,7 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
   late DateTime dateOfBirth;
   late String pronouns;
   late SWGender gender;
+  late List<SWWalkPreference> walkPreferences;
 
   final formKey = GlobalKey<FormState>();
   bool isProcessingOnboarding = false;
@@ -135,7 +137,7 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
               ),
               dropdownMenu(
                 hintText: "GENDER",
-                data: SWGender.values.map((e) => e.formattedName).toList(),
+                data: SWGender.values.map((e) => e.name).toList(),
                 context: context,
                 onChanged: (v) {
                   setState(() {
@@ -202,6 +204,28 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
                 minLines: 5,
                 showCounterText: true,
                 validator: null,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: Text(
+                  "CHOOSE YOUR WALKING PREFERENCES",
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium!.copyWith(color: SWColor.black),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              dropdownMenuMultiSelectWithSearch(
+                hintText: "Choose a few preferences...",
+                data: SWWalkPreference.values.map((e) => e.name).toList(),
+                context: context,
+                onChanged: (newValue) {
+                  setState(() {
+                    walkPreferences = newValue
+                        .map((e) => SWWalkPreference.values.byName(e!))
+                        .toList();
+                  });
+                },
               ),
             ],
           ),
