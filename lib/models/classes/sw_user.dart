@@ -76,6 +76,15 @@ class SWUser {
     this.finishedSetup = finishedSetup ?? false;
   }
 
+  bool isCurrentlyAvailable() {
+    final now = DateTime.timestamp();
+    final nowRounded = SWTime.fromDateTime(now).roundDownToFifteen();
+    final dayOfWeek = now.weekday - 1;
+    return availability
+        .firstWhere((slot) => slot.time.equals(nowRounded))
+        .availability[dayOfWeek]!;
+  }
+
   factory SWUser.fromJson(Map<String, dynamic> json) {
     return SWUser(
       created: DateTime.parse(json["created"]),

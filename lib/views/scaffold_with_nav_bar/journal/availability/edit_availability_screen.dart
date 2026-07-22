@@ -40,6 +40,16 @@ class _EditAvailabilityScreenState
           ),
         )
         .toList();
+    loadedAvailabilitySlots.sort((a, b) {
+      if (a.time.hour > b.time.hour) {
+        return 1;
+      } else if (a.time.hour == b.time.hour) {
+        if (a.time.minute > b.time.minute) {
+          return 1;
+        }
+      }
+      return -1;
+    });
     if (mounted) {
       setState(() {
         availabilitySlots = loadedAvailabilitySlots;
@@ -192,7 +202,7 @@ class _EditAvailabilityScreenState
                               builder: (context) {
                                 return AlertDialog(
                                   title: Text(
-                                    "Import your Google or Outlook Calendar for this week?",
+                                    "Import your Google Calendar for this week?",
                                     style: const TextStyle(
                                       fontSize: 20.0,
                                       fontWeight: FontWeight.w500,
@@ -221,7 +231,7 @@ class _EditAvailabilityScreenState
                                         });
                                       },
                                       child: Text(
-                                        "Google",
+                                        "Import",
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                         ),

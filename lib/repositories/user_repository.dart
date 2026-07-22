@@ -20,6 +20,16 @@ class UserRepository {
     });
   }
 
+  Stream<List<SWUser>> getUsers() {
+    return db
+        .collection("sw2_users")
+        .snapshots()
+        .map(
+          (query) =>
+              query.docs.map((doc) => SWUser.fromJson(doc.data())).toList(),
+        );
+  }
+
   Stream<SWUser> getCurrentUser() {
     final uid = authRepository.getCurrentUserId();
     final docRef = db.collection("sw2_users").doc(uid);
