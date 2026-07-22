@@ -11,6 +11,8 @@ import 'package:social_walking_2/views/scaffold_with_nav_bar/cowalks/cowalks_scr
 import 'package:social_walking_2/views/scaffold_with_nav_bar/home/home_screen.dart';
 import 'package:social_walking_2/views/login/login_screen.dart';
 import 'package:social_walking_2/views/onboarding/onboarding_screen.dart';
+import 'package:social_walking_2/views/scaffold_with_nav_bar/journal/journal_screen.dart';
+import 'package:social_walking_2/views/scaffold_with_nav_bar/profile/profile_screen.dart';
 import 'package:social_walking_2/views/scaffold_with_nav_bar/scaffold_with_nav_bar.dart';
 import 'package:social_walking_2/views/signup/signup_screen.dart';
 import 'package:social_walking_2/views/welcome/welcome_screen.dart';
@@ -69,6 +71,20 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/cowalks',
             builder: (context, state) {
               return CowalksScreen();
+            },
+          ),
+          GoRoute(
+            name: 'journal',
+            path: '/journal',
+            builder: (context, state) {
+              return JournalScreen();
+            },
+          ),
+          GoRoute(
+            name: 'profile',
+            path: '/profile',
+            builder: (context, state) {
+              return ProfileScreen();
             },
           ),
         ],

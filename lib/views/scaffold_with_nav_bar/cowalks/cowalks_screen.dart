@@ -11,6 +11,6 @@ class CowalksScreen extends ConsumerStatefulWidget {
 class _CowalksScreenState extends ConsumerState<CowalksScreen> {
   @override
   Widget build(BuildContext context) {
-    return Text("hi");
+    return Text("Cowalks");
   }
 }
