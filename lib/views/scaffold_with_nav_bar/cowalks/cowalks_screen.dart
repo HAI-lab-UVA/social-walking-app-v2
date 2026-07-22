@@ -14,6 +14,10 @@ class CowalksScreen extends ConsumerStatefulWidget {
 }
 
 class _CowalksScreenState extends ConsumerState<CowalksScreen> {
+  final usersStreamProvider = StreamProvider<List<SWUser>>((ref) {
+    return ref.watch(userRepositoryProvider).getUsersExcludingCurrent();
+  });
+
   Widget personCard(SWUser user) {
     return Container(
       decoration: BoxDecoration(
@@ -55,6 +59,7 @@ class _CowalksScreenState extends ConsumerState<CowalksScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final usersAsync = ref.watch(usersStreamProvider);
     return Scaffold(
       appBar: AppBar(title: Text("Co-Walks"), backgroundColor: SWColor.white),
       body: Padding(
@@ -63,15 +68,8 @@ class _CowalksScreenState extends ConsumerState<CowalksScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           spacing: 8.0,
           children: [
-            StreamBuilder(
-              stream: ref
-                  .watch(userRepositoryProvider)
-                  .getUsersExcludingCurrent(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(child: CircularProgressIndicator());
-                }
-                final users = snapshot.data!;
+            usersAsync.when(
+              data: (users) {
                 return Expanded(
                   child: ListView.builder(
                     itemCount: users.length,
@@ -84,6 +82,8 @@ class _CowalksScreenState extends ConsumerState<CowalksScreen> {
                   ),
                 );
               },
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (error, stackTrace) => Text('Error loading users'),
             ),
           ],
         ),
