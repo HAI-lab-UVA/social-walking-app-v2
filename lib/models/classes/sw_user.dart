@@ -56,8 +56,8 @@ class SWUser {
     this.availability =
         availability ??
         SWTimeRange(
-          start: SWTime(hour: 7, minute: 0),
-          stop: SWTime(hour: 6, minute: 45),
+          start: SWTime(hour: 0, minute: 0),
+          stop: SWTime(hour: 23, minute: 45),
           interval: 15,
         ).getTimes().map((e) => SWAvailabilitySlot(time: e)).toList();
     this.isSharingProximity = isSharingProximity ?? false;

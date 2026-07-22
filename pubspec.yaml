@@ -54,6 +54,7 @@ dependencies:
   image_cropper: ^12.2.1
   firebase_messaging: ^16.4.3
   material_symbols_icons: ^4.2951.0
+  http: ^1.6.0
 
 dev_dependencies:
   flutter_test:

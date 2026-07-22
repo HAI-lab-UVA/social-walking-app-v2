@@ -101,6 +101,19 @@ class AuthRepository {
       return AuthStatus(success: false, content: message);
     }
   }
+
+  Future<String?> signIntoGoogleCalendar() async {
+    await _initializeGoogleSignIn();
+    final scopes = [
+      "email",
+      "https://www.googleapis.com/auth/calendar.readonly",
+    ];
+    final account = await GoogleSignIn.instance.authenticate(scopeHint: scopes);
+    final GoogleSignInClientAuthorization gAuth = await account
+        .authorizationClient
+        .authorizeScopes(scopes);
+    return gAuth.accessToken;
+  }
 }
 
 final Provider<AuthRepository> authRepositoryProvider =

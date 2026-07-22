@@ -9,6 +9,7 @@ import 'package:social_walking_2/repositories/auth_repository.dart';
 import 'package:social_walking_2/repositories/user_repository.dart';
 import 'package:social_walking_2/ui/simple_ui.dart';
 import 'package:social_walking_2/ui/sw_color.dart';
+import 'package:social_walking_2/utils/google_calendar_service.dart';
 
 class EditAvailabilityScreen extends ConsumerStatefulWidget {
   const EditAvailabilityScreen({super.key});
@@ -23,15 +24,25 @@ class _EditAvailabilityScreenState
   List<SWAvailabilitySlot> availabilitySlots = [];
   bool isLoading = true;
   bool changesMade = false;
+  bool saving = false;
 
   Future<void> loadAvailabilitySlots() async {
     final currentUser = await ref
         .read(userRepositoryProvider)
         .getCurrentUser()
         .first;
+
+    final loadedAvailabilitySlots = currentUser.availability
+        .map(
+          (e) => SWAvailabilitySlot(
+            time: e.time.toLocalTime(), // convert local to utc
+            availability: e.availability,
+          ),
+        )
+        .toList();
     if (mounted) {
       setState(() {
-        availabilitySlots = currentUser.availability;
+        availabilitySlots = loadedAvailabilitySlots;
         isLoading = false;
         changesMade = false;
       });
@@ -39,18 +50,32 @@ class _EditAvailabilityScreenState
   }
 
   Future<void> saveAvailabilitySlots() async {
-    final uid = ref.read(authRepositoryProvider).getCurrentUserId();
-    await ref
-        .read(userRepositoryProvider)
-        .updateUserInfo(
-          uid: uid,
-          key: "availability",
-          value: availabilitySlots.map((e) => e.toJson()).toList(),
-        );
+    if (!saving) {
+      setState(() {
+        saving = true;
+      });
+      final uid = ref.read(authRepositoryProvider).getCurrentUserId();
+      await ref
+          .read(userRepositoryProvider)
+          .updateUserInfo(
+            uid: uid,
+            key: "availability",
+            value: availabilitySlots
+                .map(
+                  (e) => SWAvailabilitySlot(
+                    time: e.time
+                        .toUTCTimeFromLocalTime(), // convert local to utc
+                    availability: e.availability,
+                  ).toJson(),
+                )
+                .toList(),
+          );
 
-    setState(() {
-      changesMade = false;
-    });
+      setState(() {
+        changesMade = false;
+        saving = false;
+      });
+    }
   }
 
   @override
@@ -70,6 +95,7 @@ class _EditAvailabilityScreenState
               context,
             ).textTheme.titleMedium!.copyWith(color: SWColor.black),
           ),
+          leading: saving ? CircularProgressIndicator() : BackButton(),
           backgroundColor: SWColor.white,
           scrolledUnderElevation: 0.0,
         ),
@@ -78,7 +104,7 @@ class _EditAvailabilityScreenState
     }
 
     return PopScope(
-      canPop: !changesMade,
+      canPop: !changesMade && !saving,
       onPopInvokedWithResult: (didPop, result) {
         if (didPop) {
           return;
@@ -139,8 +165,8 @@ class _EditAvailabilityScreenState
                                 setState(() {
                                   availabilitySlots =
                                       SWTimeRange(
-                                            start: SWTime(hour: 7, minute: 0),
-                                            stop: SWTime(hour: 6, minute: 45),
+                                            start: SWTime(hour: 0, minute: 0),
+                                            stop: SWTime(hour: 23, minute: 45),
                                             interval: 15,
                                           )
                                           .getTimes()
@@ -160,7 +186,63 @@ class _EditAvailabilityScreenState
                           ),
                         ),
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text(
+                                    "Import your Google or Outlook Calendar for this week?",
+                                    style: const TextStyle(
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  content: Text(
+                                    "Only the times you are busy are imported. Data is only imported once and not real-time synced. Current availability is cleared.",
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () async {
+                                        Navigator.of(context).pop();
+                                        final accessToken = await ref
+                                            .read(authRepositoryProvider)
+                                            .signIntoGoogleCalendar();
+                                        final calendarAvailabilitySlots =
+                                            await GoogleCalendarService()
+                                                .getWeeklyBusyBlocks(
+                                                  accessToken!,
+                                                );
+
+                                        setState(() {
+                                          availabilitySlots =
+                                              calendarAvailabilitySlots;
+                                          changesMade = true;
+                                        });
+                                      },
+                                      child: Text(
+                                        "Google",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text(
+                                        "Cancel",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
                           icon: Icon(
                             Symbols.calendar_add_on,
                             weight: 600.0,
