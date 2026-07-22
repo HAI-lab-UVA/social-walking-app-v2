@@ -11,14 +11,19 @@ import 'package:social_walking_2/views/scaffold_with_nav_bar/cowalks/cowalks_scr
 import 'package:social_walking_2/views/scaffold_with_nav_bar/home/home_screen.dart';
 import 'package:social_walking_2/views/login/login_screen.dart';
 import 'package:social_walking_2/views/onboarding/onboarding_screen.dart';
+import 'package:social_walking_2/views/scaffold_with_nav_bar/journal/availability/edit_availability_screen.dart';
 import 'package:social_walking_2/views/scaffold_with_nav_bar/journal/journal_screen.dart';
 import 'package:social_walking_2/views/scaffold_with_nav_bar/profile/profile_screen.dart';
 import 'package:social_walking_2/views/scaffold_with_nav_bar/scaffold_with_nav_bar.dart';
 import 'package:social_walking_2/views/signup/signup_screen.dart';
 import 'package:social_walking_2/views/welcome/welcome_screen.dart';
 
+final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> _shellNavigatorKey =
+    GlobalKey<NavigatorState>();
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
+    navigatorKey: _rootNavigatorKey,
     initialLocation: '/',
     refreshListenable: GoRouterRefreshStream(
       FirebaseAuth.instance.authStateChanges(),
@@ -55,6 +60,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => AuthCheckScreen(),
       ),
       ShellRoute(
+        navigatorKey: _shellNavigatorKey,
         builder: (context, state, child) {
           return ScaffoldWithNavBar(child: child);
         },
@@ -79,6 +85,16 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (context, state) {
               return JournalScreen();
             },
+            routes: [
+              GoRoute(
+                parentNavigatorKey: _rootNavigatorKey,
+                name: 'edit-availability',
+                path: 'edit-availability',
+                builder: (context, state) {
+                  return EditAvailabilityScreen();
+                },
+              ),
+            ],
           ),
           GoRoute(
             name: 'profile',

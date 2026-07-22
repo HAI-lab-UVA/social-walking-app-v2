@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:social_walking_2/ui/sw_color.dart';
 
 class ScaffoldWithNavBar extends StatefulWidget {
   const ScaffoldWithNavBar({super.key, required this.child});
@@ -11,12 +12,18 @@ class ScaffoldWithNavBar extends StatefulWidget {
 
 class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar> {
   final routes = ["/home", "/cowalks", "/journal", "/profile"];
+  final routeNames = ["Home", "Co-Walks", "Journal", "Profile"];
   int currentPageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: NavigationBar(
+        backgroundColor: SWColor.white,
+        overlayColor: WidgetStateProperty.all(SWColor.grayLight),
+        shadowColor: SWColor.grayLight,
+        indicatorColor: SWColor.grayLight,
+        surfaceTintColor: SWColor.grayLight,
         selectedIndex: currentPageIndex,
         onDestinationSelected: (int index) {
           setState(() {
@@ -46,9 +53,7 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar> {
           ),
         ],
       ),
-      body: SafeArea(
-        child: Padding(padding: const EdgeInsets.all(8.0), child: widget.child),
-      ),
+      body: widget.child,
     );
   }
 }
