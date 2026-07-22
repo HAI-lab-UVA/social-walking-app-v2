@@ -14,6 +14,19 @@ enum SWWalkPreference {
   nature("In Nature"),
   trails("On Trails");
 
-  final String name;
-  const SWWalkPreference(this.name);
+  final String formattedName;
+  const SWWalkPreference(this.formattedName);
+}
+
+extension SWWalkPreferenceExtension on SWWalkPreference {
+  static SWWalkPreference? fromFormattedName(String name) {
+    for (var value in SWWalkPreference.values) {
+      if (value.formattedName == name) return value;
+    }
+    return null;
+  }
+
+  static List<String> formattedNames() {
+    return SWWalkPreference.values.map((e) => e.formattedName).toList();
+  }
 }

@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:social_walking_2/models/classes/sw_user.dart';
 import 'package:social_walking_2/models/enums/sw_gender.dart';
 import 'package:social_walking_2/models/enums/sw_walk_preference.dart';
 import 'package:social_walking_2/repositories/auth_repository.dart';
+import 'package:social_walking_2/repositories/image_repository.dart';
 import 'package:social_walking_2/repositories/user_repository.dart';
 import 'package:social_walking_2/ui/simple_ui.dart';
 import 'package:social_walking_2/ui/sw_color.dart';
 import 'package:intl/intl.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:social_walking_2/ui/user_profile_image.dart';
 
 class OnboadingScreen extends ConsumerStatefulWidget {
   const OnboadingScreen({super.key});
@@ -27,9 +31,21 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
   late String pronouns;
   late SWGender gender;
   late List<SWWalkPreference> walkPreferences;
+  String? profileImageURL;
 
   final formKey = GlobalKey<FormState>();
   bool isProcessingOnboarding = false;
+
+  void confirmFinished() {
+    if (formKey.currentState!.validate()) {
+      confirmDialog(
+        context: context,
+        title: "Are you done setting up your profile?",
+        content: "You can edit your profile information at any time.",
+        callback: createAccount,
+      );
+    }
+  }
 
   void createAccount() async {
     if (!isProcessingOnboarding) {
@@ -47,7 +63,7 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
           dateOfBirth: dateOfBirth,
           gender: gender,
           biography: bioController.text,
-          profileImageURL: null,
+          profileImageURL: profileImageURL,
         );
         ref.read(userRepositoryProvider).createUser(uid, newUser).then((_) {
           if (mounted) {
@@ -58,6 +74,58 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
         setState(() {
           isProcessingOnboarding = false;
         });
+      }
+    }
+  }
+
+  Future<void> selectImage() async {
+    setState(() {
+      isProcessingOnboarding = true;
+    });
+    final picker = ImagePicker();
+    final file = await picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 60,
+    );
+    if (file != null) {
+      if (mounted) {
+        final croppedFile = await ImageCropper().cropImage(
+          sourcePath: file.path,
+          uiSettings: [
+            AndroidUiSettings(
+              toolbarTitle: 'Cropper',
+              toolbarColor: SWColor.blue,
+              toolbarWidgetColor: SWColor.white,
+              cropStyle: CropStyle.circle,
+              aspectRatioPresets: [
+                CropAspectRatioPreset.original,
+                CropAspectRatioPreset.square,
+              ],
+            ),
+            IOSUiSettings(
+              title: 'Cropper',
+              cropStyle: CropStyle.circle,
+              aspectRatioPresets: [
+                CropAspectRatioPreset.original,
+                CropAspectRatioPreset.square,
+              ],
+            ),
+            WebUiSettings(context: context),
+          ],
+        );
+
+        if (croppedFile != null) {
+          final imageData = await croppedFile.readAsBytes();
+          final mime = file.mimeType;
+          final imageRepository = ref.watch(imageRepositoryProvider);
+          profileImageURL = await imageRepository.uploadImage(
+            imageData,
+            mime: mime,
+          );
+          setState(() {
+            isProcessingOnboarding = false;
+          });
+        }
       }
     }
   }
@@ -75,25 +143,16 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
   Widget build(BuildContext context) {
     final listViewItems = [
       SizedBox(height: 30),
-      Text(
-        "Hello! Welcome to the Social Walking Community",
-        style: Theme.of(
-          context,
-        ).textTheme.titleLarge!.copyWith(color: SWColor.black),
-        textAlign: TextAlign.center,
+      multiColorSentence(
+        text: ["Hello! ", "Welcome to the Social Walking Community"],
+        colors: [SWColor.blue, SWColor.black],
+        style: Theme.of(context).textTheme.titleLarge,
       ),
       Text(
-        "First, tell us about yourself",
+        "Tell us about yourself!",
         style: Theme.of(
           context,
         ).textTheme.titleMedium!.copyWith(color: SWColor.black),
-        textAlign: TextAlign.center,
-      ),
-      Text(
-        "(You can change this information later)",
-        style: Theme.of(
-          context,
-        ).textTheme.bodySmall!.copyWith(color: SWColor.black),
         textAlign: TextAlign.center,
       ),
       SizedBox(height: 30),
@@ -137,12 +196,12 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
               ),
               dropdownMenu(
                 hintText: "GENDER",
-                data: SWGender.values.map((e) => e.name).toList(),
+                data: SWGenderExtension.formattedNames(),
                 context: context,
                 onChanged: (v) {
                   setState(() {
                     if (v != null) {
-                      gender = SWGender.values.byName(v);
+                      gender = SWGenderExtension.fromFormattedName(v)!;
                     }
                   });
                 },
@@ -217,23 +276,48 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
               ),
               dropdownMenuMultiSelectWithSearch(
                 hintText: "Choose a few preferences...",
-                data: SWWalkPreference.values.map((e) => e.name).toList(),
+                data: SWWalkPreferenceExtension.formattedNames(),
                 context: context,
                 onChanged: (newValue) {
                   setState(() {
                     walkPreferences = newValue
-                        .map((e) => SWWalkPreference.values.byName(e!))
+                        .map(
+                          (e) =>
+                              SWWalkPreferenceExtension.fromFormattedName(e!)!,
+                        )
                         .toList();
                   });
                 },
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: Text(
+                  "TAP TO UPLOAD A PROFILE PHOTO",
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium!.copyWith(color: SWColor.black),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              GestureDetector(
+                onTap: selectImage,
+                child: Center(
+                  child: UserProfileImage(
+                    imageURL: profileImageURL,
+                    radius: 100,
+                    showStatusDot: false,
+                  ),
+                ),
               ),
             ],
           ),
         ),
       ),
+      SizedBox(height: 20),
+
       customButton(
-        text: "LET'S GO!",
-        onPressed: createAccount,
+        text: "NEXT",
+        onPressed: confirmFinished,
         backgroundColor: SWColor.blueLight,
       ),
 

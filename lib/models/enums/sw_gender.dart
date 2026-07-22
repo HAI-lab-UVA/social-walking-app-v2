@@ -5,8 +5,21 @@ enum SWGender {
   other("Other"),
   preferNotToSay("Prefer Not To Say");
 
-  final String name;
-  const SWGender(this.name);
+  final String formattedName;
+  const SWGender(this.formattedName);
+}
+
+extension SWGenderExtension on SWGender {
+  static SWGender? fromFormattedName(String name) {
+    for (var value in SWGender.values) {
+      if (value.formattedName == name) return value;
+    }
+    return null;
+  }
+
+  static List<String> formattedNames() {
+    return SWGender.values.map((e) => e.formattedName).toList();
+  }
 }
 
 final pronounsList = [

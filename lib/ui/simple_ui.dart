@@ -360,3 +360,47 @@ Widget dropdownMenuMultiSelectWithSearch({
     ),
   );
 }
+
+void confirmDialog({
+  required BuildContext context,
+  required String title,
+  required String content,
+  required Function callback,
+}) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text(
+          title,
+          style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),
+        ),
+        content: Text(content),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              callback();
+            },
+            child: Text(
+              "Yes",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: SWColor.green,
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text(
+              "No",
+              style: TextStyle(fontWeight: FontWeight.bold, color: SWColor.red),
+            ),
+          ),
+        ],
+      );
+    },
+  );
+}
