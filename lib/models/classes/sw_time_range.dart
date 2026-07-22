@@ -11,8 +11,19 @@ class SWTimeRange {
     required this.interval,
   });
 
+  @override
   String toString() {
     return "$start-$stop-$interval";
+  }
+
+  List<SWTime> getTimes() {
+    SWTime currentTime = start;
+    List<SWTime> times = [currentTime];
+    while (!currentTime.equals(stop)) {
+      currentTime = currentTime.addMinutes(interval);
+      times.add(currentTime);
+    }
+    return times;
   }
 
   factory SWTimeRange.fromString(String str) {

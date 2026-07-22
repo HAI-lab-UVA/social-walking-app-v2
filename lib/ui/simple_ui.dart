@@ -364,8 +364,9 @@ Widget dropdownMenuMultiSelectWithSearch({
 void confirmDialog({
   required BuildContext context,
   required String title,
-  required String content,
   required Function callback,
+  Function? noCallback,
+  String? content,
 }) {
   showDialog(
     context: context,
@@ -375,7 +376,7 @@ void confirmDialog({
           title,
           style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),
         ),
-        content: Text(content),
+        content: content == null ? null : Text(content),
         actions: [
           TextButton(
             onPressed: () {
@@ -393,11 +394,41 @@ void confirmDialog({
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
+              if (noCallback != null) {
+                noCallback();
+              }
             },
             child: Text(
               "No",
               style: TextStyle(fontWeight: FontWeight.bold, color: SWColor.red),
             ),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+void okDialog({
+  required BuildContext context,
+  required String title,
+  String? content,
+}) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text(
+          title,
+          style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),
+        ),
+        content: content == null ? null : Text(content),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text("OK"),
           ),
         ],
       );

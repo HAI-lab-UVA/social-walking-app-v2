@@ -67,7 +67,7 @@ class _OnboadingScreenState extends ConsumerState<OnboadingScreen> {
         );
         ref.read(userRepositoryProvider).createUser(uid, newUser).then((_) {
           if (mounted) {
-            context.go("/home");
+            context.go("/permission-request");
           }
         });
       } else {

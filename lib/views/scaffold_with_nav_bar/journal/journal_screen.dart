@@ -57,7 +57,7 @@ class _JournalScreenState extends ConsumerState<JournalScreen> {
                   spacing: 8.0,
                   children: [
                     Text(
-                      "Your Availability Today",
+                      "Your Availability",
                       style: Theme.of(
                         context,
                       ).textTheme.bodyMedium!.copyWith(color: SWColor.black),

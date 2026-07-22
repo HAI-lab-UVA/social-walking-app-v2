@@ -1,5 +1,7 @@
+import 'package:social_walking_2/models/classes/sw_availability_slot.dart';
 import 'package:social_walking_2/models/classes/sw_fitness_goal.dart';
 import 'package:social_walking_2/models/classes/sw_location.dart';
+import 'package:social_walking_2/models/classes/sw_time.dart';
 import 'package:social_walking_2/models/classes/sw_time_range.dart';
 import 'package:social_walking_2/models/enums/sw_gender.dart';
 import 'package:social_walking_2/models/enums/sw_walk_preference.dart';
@@ -18,7 +20,7 @@ class SWUser {
   late List<SWWalkPreference> walkPreferences;
   late Map<String, int> walkedWith = {};
   late List<String> chattedWith = [];
-  late Map<int, List<SWTimeRange>> availability;
+  late List<SWAvailabilitySlot> availability;
   late bool isSharingProximity;
   late Map<int, SWFitnessGoal?> weeklySocialStepGoals;
   late bool finishedSetup;
@@ -39,7 +41,7 @@ class SWUser {
     List<SWWalkPreference>? walkPreferences,
     Map<String, int>? walkedWith,
     List<String>? chattedWith,
-    Map<int, List<SWTimeRange>>? availability,
+    List<SWAvailabilitySlot>? availability,
     bool? isSharingProximity,
     Map<int, SWFitnessGoal?>? weeklySocialStepGoals,
     this.weeklyMeetPeopleGoal,
@@ -53,7 +55,11 @@ class SWUser {
     this.chattedWith = chattedWith ?? [];
     this.availability =
         availability ??
-        {0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: []};
+        SWTimeRange(
+          start: SWTime(hour: 7, minute: 0),
+          stop: SWTime(hour: 6, minute: 45),
+          interval: 15,
+        ).getTimes().map((e) => SWAvailabilitySlot(time: e)).toList();
     this.isSharingProximity = isSharingProximity ?? false;
     this.weeklySocialStepGoals =
         weeklySocialStepGoals ??
@@ -91,14 +97,9 @@ class SWUser {
       chattedWith: (json["chattedWith"] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
-      availability: (json["availability"] as Map<String, dynamic>).map(
-        (k, v) => MapEntry(
-          int.parse(k),
-          (v as List<dynamic>)
-              .map((e) => SWTimeRange.fromString(e as String))
-              .toList(),
-        ),
-      ),
+      availability: (json["availability"] as List<dynamic>)
+          .map((e) => SWAvailabilitySlot.fromJson(e as Map<String, dynamic>))
+          .toList(),
       isSharingProximity: json["isSharingProximity"] as bool,
       weeklySocialStepGoals:
           (json["weeklySocialStepGoals"] as Map<String, dynamic>).map(
@@ -132,9 +133,7 @@ class SWUser {
       "walkPreferences": walkPreferences.map((e) => e.name).toList(),
       "walkedWith": walkedWith,
       "chattedWith": chattedWith,
-      "availability": availability.map(
-        (k, v) => MapEntry(k.toString(), v.map((e) => e.toString()).toList()),
-      ),
+      "availability": availability.map((e) => e.toJson()).toList(),
       "isSharingProximity": isSharingProximity,
       "weeklySocialStepGoals": weeklySocialStepGoals.map(
         (k, v) => MapEntry(k.toString(), v?.toString()),
