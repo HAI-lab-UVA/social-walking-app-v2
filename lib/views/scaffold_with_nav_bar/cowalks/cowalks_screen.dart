@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_symbols_icons/symbols.dart';
+import 'package:social_walking_2/models/classes/sw_user.dart';
 import 'package:social_walking_2/repositories/user_repository.dart';
 import 'package:social_walking_2/ui/sw_color.dart';
 import 'package:social_walking_2/ui/user_profile_image.dart';
@@ -12,16 +14,41 @@ class CowalksScreen extends ConsumerStatefulWidget {
 }
 
 class _CowalksScreenState extends ConsumerState<CowalksScreen> {
-  Widget personCard() {
+  Widget personCard(SWUser user) {
     return Container(
       decoration: BoxDecoration(
         color: SWColor.grayLight,
         borderRadius: BorderRadius.circular(18.0),
       ),
-      child: Row(
-        children: [
-          //UserProfileImage(imageURL: imageURL, radius: radius, showStatusDot: showStatusDot)
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            UserProfileImage(
+              imageURL: user.profileImageURL,
+              radius: 26.0,
+              showStatusDot: true,
+              statusDotColor: user.isCurrentlyAvailable()
+                  ? SWColor.green
+                  : SWColor.grayLight,
+            ),
+            SizedBox(width: 10.0),
+            Text(
+              "${user.firstName} ${user.lastName}",
+              style: Theme.of(context).textTheme.bodyMedium!,
+              textAlign: TextAlign.start,
+            ),
+            Spacer(),
+            IconButton(
+              onPressed: () {},
+              icon: Icon(Symbols.person_book, weight: 600.0, size: 28.0),
+            ),
+            IconButton(
+              onPressed: () {},
+              icon: Icon(Symbols.chat, weight: 600.0, size: 28.0),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -37,9 +64,25 @@ class _CowalksScreenState extends ConsumerState<CowalksScreen> {
           spacing: 8.0,
           children: [
             StreamBuilder(
-              stream: ref.watch(userRepositoryProvider).getUsers(),
+              stream: ref
+                  .watch(userRepositoryProvider)
+                  .getUsersExcludingCurrent(),
               builder: (context, snapshot) {
-                return Text("hi");
+                if (!snapshot.hasData) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                final users = snapshot.data!;
+                return Expanded(
+                  child: ListView.builder(
+                    itemCount: users.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 4.0, bottom: 4.0),
+                        child: personCard(users[index]),
+                      );
+                    },
+                  ),
+                );
               },
             ),
           ],

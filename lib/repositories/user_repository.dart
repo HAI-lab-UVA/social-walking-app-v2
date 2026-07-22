@@ -20,9 +20,11 @@ class UserRepository {
     });
   }
 
-  Stream<List<SWUser>> getUsers() {
+  Stream<List<SWUser>> getUsersExcludingCurrent() {
+    final currentUid = authRepository.getCurrentUserId();
     return db
         .collection("sw2_users")
+        .where("id", isNotEqualTo: currentUid)
         .snapshots()
         .map(
           (query) =>
